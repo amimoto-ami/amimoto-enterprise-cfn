@@ -1,5 +1,6 @@
 _include 'include/vpc/subnet.rb'
 _include 'include/vpc/route_table.rb'
+_include 'include/vpc/association_routetable.rb'
 VPC do
   Type "AWS::EC2::VPC"
   Properties do
