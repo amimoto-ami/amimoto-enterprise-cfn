@@ -1,3 +1,4 @@
+_include 'include/vpc/subnet.rb'
 VPC do
   Type "AWS::EC2::VPC"
   Properties do
