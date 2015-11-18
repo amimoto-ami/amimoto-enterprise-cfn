@@ -3,7 +3,7 @@ PublicSubnet do
   Properties do
     CidrBlock "10.0.0.0/24"
     AvailabilityZone "us-west-2a"
-    MapPublicIpOnLaunch "false"
+    MapPublicIpOnLaunch "true"
     VpcId do
       Ref "VPC"
     end
