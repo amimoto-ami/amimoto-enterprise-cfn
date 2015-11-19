@@ -30,11 +30,15 @@ EC2 do
         service httpd start
       EOS
     end
+    SecurityGroupIds [
+      _{
+        Ref "SecurityGroup"
+      }
+    ]
   end
 end
 
 #"IamInstanceProfile" : String,
-#"NetworkInterfaces" : [ EC2 Network Interface, ... ],
 #"PrivateIpAddress" : String,
 #"SecurityGroups" : [ String, ... ],
 #"Volumes" : [ EC2 MountPoint, ... ],
