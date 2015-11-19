@@ -4,7 +4,13 @@ EC2 do
     AvailabilityZone "us-west-2a"
     DisableApiTermination "false"
     EbsOptimized "false"
-    ImageId "ami-f0091d91"
+    ImageId do
+      Fn__FindInMap [
+        "MPAmimotov4",
+        "us-west-2",
+        "AMI"
+      ]
+    end
     InstanceInitiatedShutdownBehavior "stop"
     InstanceType "t2.micro"
     KeyName {
