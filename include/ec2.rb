@@ -7,7 +7,7 @@ EC2 do
     ImageId do
       Fn__FindInMap [
         "MPAmimotov4",
-        "us-west-2",
+        _{ Ref "AWS::Region" },
         "AMI"
       ]
     end
