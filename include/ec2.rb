@@ -7,7 +7,9 @@ EC2 do
     ImageId "ami-f0091d91"
     InstanceInitiatedShutdownBehavior "stop"
     InstanceType "t2.micro"
-    KeyName { Ref "KeyName"}
+    KeyName {
+      Ref "KeyName"
+    }
     Monitoring "false"
     SubnetId do
       Ref "PublicSubnet"
@@ -34,6 +36,5 @@ end
 #"IamInstanceProfile" : String,
 #"NetworkInterfaces" : [ EC2 Network Interface, ... ],
 #"PrivateIpAddress" : String,
-#"SecurityGroupIds" : [ String, ... ],
 #"SecurityGroups" : [ String, ... ],
 #"Volumes" : [ EC2 MountPoint, ... ],
