@@ -5,6 +5,7 @@ EOS
 
 Mappings do
   _include "include/mapping/ami_hvm.rb"
+  _include "include/mapping/az.rb"
 end
 
 Parameters do

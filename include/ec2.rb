@@ -1,7 +1,13 @@
 EC2 do
   Type "AWS::EC2::Instance"
   Properties do
-    AvailabilityZone "us-west-2a"
+    AvailabilityZone do
+      Fn__FindInMap [
+        "AZs",
+        _{ Ref "AWS::Region"},
+        "PRI"
+      ]
+    end
     DisableApiTermination "false"
     EbsOptimized "false"
     ImageId do
