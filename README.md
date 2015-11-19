@@ -6,7 +6,7 @@
 - topicbranch :単体テスト
 
 ##How To Build
-現在us-west-2（オレゴン）リージョン決め打ちです。
+
 ###create-vpc.rb
 ```
 kumogata create create-vpc.rb STACKNAME \
