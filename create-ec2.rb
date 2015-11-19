@@ -9,6 +9,7 @@ end
 
 Parameters do
   _include "params/keyname.rb"
+  _include "params/ec2_instance.rb"
 end
 
 Resources do

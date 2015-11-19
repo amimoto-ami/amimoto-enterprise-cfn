@@ -12,7 +12,9 @@ EC2 do
       ]
     end
     InstanceInitiatedShutdownBehavior "stop"
-    InstanceType "t2.micro"
+    InstanceType {
+      Ref "InstanceType"
+    }
     KeyName {
       Ref "KeyName"
     }
