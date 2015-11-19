@@ -1,3 +1,4 @@
+_include "include/eip.rb"
 EC2 do
   Type "AWS::EC2::Instance"
   Properties do
