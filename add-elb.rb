@@ -20,3 +20,26 @@ Resources do
   _include "include/security_group.rb"
   _include "include/elb.rb"
 end
+
+Outputs do
+  WebSiteURL do
+    Description "WordPress Site URL  (Please wait a few minutes for the upgrade of WordPress to access for the first time.)"
+    Value do
+      Fn__Join [
+        "",
+        [
+          "http://",
+          _{
+            Fn__GetAtt "ELB", "DNSName"
+          }
+        ]
+      ]
+    end
+  end
+  InstanceId do
+    Description "Access for the first time, Please input it."
+    Value do
+      Ref "EC2"
+    end
+  end
+end
