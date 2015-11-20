@@ -22,6 +22,7 @@ kumogata create create-vpc.rb STACKNAME \
 
 ###Simple EC2 Stack(HVM)
 VPC内にEC2を一台設置したシンプルなAMIMOTOスタックです。
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
 ```
 kumogata create simple-ec2-hvm.rb STACKNAME \
  -r REGION \
