@@ -28,3 +28,12 @@ kumogata create simple-ec2-hvm.rb STACKNAME \
  -r REGION \
  -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE"
 ```
+
+###Okehazama(HVM)
+VPC内にEC2を１台設置し、前面にELBを配置したAMIMOTOスタックです。
+![Okehazama Stack構成イメージ](img/Okehazama.png "Okehazama Stack構成イメージ")
+```
+kumogata create okehazama-hvm.rb STACKNAME \
+ -r REGION \
+ -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE"
+```
