@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
   This is Simple AMIMOTO Stack made by CloudFormation.
+  VPC/PublicSubnet/EC2/EIP
 EOS
 
 Mappings do
