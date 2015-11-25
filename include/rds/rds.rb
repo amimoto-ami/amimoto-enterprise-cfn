@@ -22,7 +22,9 @@ RDS do
     end
     Engine "MariaDB"
     MasterUsername "amimoto"
-    MasterUserPassword "kdr61o9tc9"
+    MasterUserPassword do
+      Ref "MySQLPassword"
+    end
     MultiAZ false
     Port 3306
     PreferredBackupWindow "00:00-00:30"
