@@ -16,7 +16,7 @@ end
 
 Resources do
   _include 'include/vpc/vpc.rb'
-  _include "include/ec2.rb"
+  _include "include/ec2/ec2.rb"
   _include "include/security_group.rb"
   _include "include/elb.rb"
 end
