@@ -1,5 +1,6 @@
 _include 'include/rds/rds_subnet.rb'
 _include 'include/rds/rds_subnet_group.rb'
+_include 'include/rds/rds_security_group.rb'
 
 RDS do
   Type "AWS::RDS::DBInstance"
@@ -45,7 +46,7 @@ RDS do
     ]
     VPCSecurityGroups [
       _{
-        Ref "SecurityGroup"
+        Ref "RDSSecurityGroup"
       }
     ]
   end
