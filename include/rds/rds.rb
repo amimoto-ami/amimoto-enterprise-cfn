@@ -25,7 +25,9 @@ RDS do
     MasterUserPassword do
       Ref "MySQLPassword"
     end
-    MultiAZ false
+    MultiAZ do
+      Ref "MulitiAZDatabase"
+    end
     Port 3306
     PreferredBackupWindow "00:00-00:30"
     PreferredMaintenanceWindow "sun:16:00-sun:17:30"
