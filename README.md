@@ -37,3 +37,11 @@ kumogata create okehazama-hvm.rb STACKNAME \
  -r REGION \
  -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE"
 ```
+
+###Anegawa(HVM)
+※作成中
+Okehazama にRDSを１台配置したAMIMOTOスタックです。
+
+###Kawanakajima(HVM)
+※作成予定
+AnegawaのRDSをマルチA-ZにしたAMIMOTOスタックです。
