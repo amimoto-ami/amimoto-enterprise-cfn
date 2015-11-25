@@ -37,13 +37,6 @@ EC2 do
       }
     ]
     Tenancy "default"
-    UserData do
-      Fn__Base64 (<<-EOS).undent
-        #!/bin/bash
-        yum install -y httpd
-        service httpd start
-      EOS
-    end
     SecurityGroupIds [
       _{
         Ref "SecurityGroup"
