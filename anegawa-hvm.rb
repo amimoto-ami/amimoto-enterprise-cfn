@@ -15,6 +15,7 @@ Parameters do
 end
 
 Resources do
+  _include 'include/vpc/private_subnet.rb'
   _include 'include/vpc/vpc.rb'
   _include "include/ec2.rb"
   _include "include/security_group.rb"
