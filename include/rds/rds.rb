@@ -4,7 +4,9 @@ _include 'include/rds/rds_subnet_group.rb'
 RDS do
   Type "AWS::RDS::DBInstance"
   Properties do
-    AllocatedStorage "20"
+    AllocatedStorage do
+      Ref "DBAllocatedStorage"
+    end
     AllowMajorVersionUpgrade true
     AutoMinorVersionUpgrade true
     AvailabilityZone do
@@ -15,7 +17,9 @@ RDS do
       ]
     end
     BackupRetentionPeriod 1
-    DBInstanceClass "db.t2.small"
+    DBInstanceClass do
+      Ref "RDSInstanceType"
+    end
     DBName "wordpress"
     DBSubnetGroupName do
       Ref "DBSubnetGroup"
