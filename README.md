@@ -41,6 +41,7 @@ s
 ###Kawanakajima(HVM)
 AnegawaのRDSをマルチA-ZにしたAMIMOTOスタックです。
 MariaDB版とAurora版の２テンプレートがあります。
+![Kawanakajima Stack構成イメージ](img/Kawanakajima.png "Kawanakajima Stack構成イメージ")
 ####MariaDB版
 ```
 kumogata create kawanakajima-hvm-maria.rb STACKNAME \
