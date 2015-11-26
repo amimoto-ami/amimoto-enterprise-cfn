@@ -6,8 +6,8 @@ _include 'include/rds_aurora/aurora_cluster.rb'
 RDS do
   Type "AWS::RDS::DBInstance"
   Properties do
-    AllocatedStorage do
-      Ref "DBAllocatedStorage"
+    DBClusterIdentifier do
+      Ref "RDSCluster"
     end
     AllowMajorVersionUpgrade true
     AutoMinorVersionUpgrade true
@@ -18,36 +18,22 @@ RDS do
         "PRI"
       ]
     end
-    BackupRetentionPeriod 1
     DBInstanceClass do
       Ref "RDSInstanceType"
     end
-    DBName "wordpress"
     DBSubnetGroupName do
       Ref "DBSubnetGroup"
     end
     Engine "aurora"
-    MasterUsername "amimoto"
-    MasterUserPassword do
-      Ref "MySQLPassword"
-    end
     MultiAZ do
       Ref "MulitiAZDatabase"
     end
-    Port 3306
-    PreferredBackupWindow "00:00-00:30"
-    PreferredMaintenanceWindow "sun:16:00-sun:17:30"
     Tags [
       _{
         Key "Application"
         Value do
           Ref "AWS::StackName"
         end
-      }
-    ]
-    VPCSecurityGroups [
-      _{
-        Ref "RDSSecurityGroup"
       }
     ]
   end
