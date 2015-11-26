@@ -37,11 +37,19 @@ kumogata create okehazama-hvm.rb STACKNAME \
  -r REGION \
  -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE"
 ```
-
-###Anegawa(HVM)
-※作成中
-Okehazama にRDSを１台配置したAMIMOTOスタックです。
-
+s
 ###Kawanakajima(HVM)
-※作成予定
 AnegawaのRDSをマルチA-ZにしたAMIMOTOスタックです。
+MariaDB版とAurora版の２テンプレートがあります。
+####MariaDB版
+```
+kumogata create kawanakajima-hvm-maria.rb STACKNAME \
+ -r REGION \
+-p "KeyName=KEYNAME,MySQLPassword=MYSQLPASS,MulitiAZDatabase=TRUE,RDSInstanceType=DB_INSTANCE_TYPE,InstanceType=EC2_INSTANCE_TYPE"
+```
+####Amazon Aurora版
+```
+kumogata create kawanakajima-hvm-aurora.rb STACKNAME \
+ -r REGION \
+-p "KeyName=KEYNAME,MySQLPassword=MYSQLPASS,MulitiAZDatabase=TRUE,RDSInstanceType=DB_INSTANCE_TYPE,InstanceType=EC2_INSTANCE_TYPE"
+```
