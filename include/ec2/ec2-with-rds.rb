@@ -74,7 +74,7 @@ EC2 do
             _{
               Ref "AWS::StackName"
             },
-            " -r RDS ",
+            " -r EC2 ",
             " --region ",
             _{
               Ref "AWS::Region"
