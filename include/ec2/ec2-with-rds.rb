@@ -1,3 +1,5 @@
+_include 'include/iam/create-snapshot.rb'
+
 EC2 do
   Type "AWS::EC2::Instance"
   Metadata do
@@ -95,10 +97,10 @@ EC2 do
         Ref "SecurityGroup"
       }
     ]
+    IamInstanceProfile do
+      Ref "IAMCreateSnapshot"
+    end
   end
 end
 
-#"IamInstanceProfile" : String,
-#"PrivateIpAddress" : String,
-#"SecurityGroups" : [ String, ... ],
 #"Volumes" : [ EC2 MountPoint, ... ],

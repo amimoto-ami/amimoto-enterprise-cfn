@@ -13,5 +13,5 @@ end
 
 Resources do
   _include 'include/vpc/vpc.rb'
-  _include 'include/iam/create-snapshot.rb'
+  _include "include/ec2/ec2.rb"
 end
