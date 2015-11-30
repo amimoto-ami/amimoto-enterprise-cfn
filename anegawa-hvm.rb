@@ -33,7 +33,7 @@ Outputs do
         [
           "http://",
           _{
-            Fn__GetAtt "ELB", "DNSName"
+            Fn__GetAtt "CloudFront", "DomainName"
           }
         ]
       ]
@@ -43,6 +43,12 @@ Outputs do
     Description "Access for the first time, Please input it."
     Value do
       Ref "EC2"
+    end
+  end
+  DistributionId do
+    Description "This is CloudFront Disctribution ID. Please set 'C3 CloudFlont Cache Clear' plugin on admin page."
+    Value do
+      Ref "CloudFront"
     end
   end
 end
