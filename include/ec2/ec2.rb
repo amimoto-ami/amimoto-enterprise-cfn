@@ -1,4 +1,4 @@
-_include 'include/iam/create-snapshot.rb'
+_include 'include/iam/ec2attached.rb'
 
 EC2 do
   Type "AWS::EC2::Instance"
@@ -59,7 +59,7 @@ EC2 do
       }
     ]
     IamInstanceProfile do
-      Ref "IAMCreateSnapshot"
+      Ref "IAMForEC2"
     end
     UserData do
       Fn__Base64 do

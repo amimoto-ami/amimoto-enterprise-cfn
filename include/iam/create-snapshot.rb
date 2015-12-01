@@ -42,19 +42,3 @@ IAMCreateSnapshotPolicies do
     ]
   end
 end
-
-IAMCreateSnapshot do
-  Type "AWS::IAM::InstanceProfile"
-  Properties do
-    Path  "/"
-    Roles [
-      _{
-        Ref "IAMCreateSnapshotRole"
-      }
-    ]
-  end
-end
-
-#ManagedPolicyArns ""
-#Path ""
-#Policies ""
