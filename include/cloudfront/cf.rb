@@ -43,7 +43,7 @@ CloudFront do
           "HEAD",
           "GET"
         ]
-        MinTTL "3600"
+        MinTTL "0"
         TargetOriginId do
           Ref "AWS::StackName"
         end
