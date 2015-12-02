@@ -13,7 +13,18 @@ EC2 do
             content "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
           end
           _path("/opt/aws/cloud_formation.json") do
-            source "https://s3-ap-northeast-1.amazonaws.com/cf-amimoto-templates/cfn_file_templates/rds.json.template"
+              content '{
+                "rds" : {
+                  "database" : "wordpress",
+                  "username" : "amimoto",
+                  "password" : "{{password}}",
+                  "endpoint" : "{{endpoint}}",
+                  "port"     : 3306
+                },
+                "is-use" : {
+                  "cloudfront" : "true"
+                }
+              }'
             context do
               endpoint do
                 Fn__GetAtt "RDS", "Endpoint.Address"
