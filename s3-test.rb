@@ -19,4 +19,14 @@ Resources do
   _include "include/ec2/ec2.rb"
   _include "include/security_group.rb"
   _include "include/eip.rb"
+  _include "include/s3/s3-media.rb"
+end
+
+Outputs do
+  S3URL do
+    Description "This is S3 Media Upload URL."
+    Value do
+      Fn__GetAtt "S3Media", "WebsiteURL"
+    end
+  end
 end
