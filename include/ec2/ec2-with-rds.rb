@@ -22,7 +22,8 @@ EC2 do
                   "port"     : 3306
                 },
                 "is-use" : {
-                  "cloudfront" : "true"
+                  "cloudfront" : "true",
+                  "s3media" : "true",
                 }
               }'
             context do
