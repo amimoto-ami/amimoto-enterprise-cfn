@@ -45,13 +45,25 @@ kumogata create kawanakajima-hvm-aurora.rb STACKNAME \
 ```
 
 ###Anegawa(HVM)
-CloudFrontを追加する予定です。
+CloudFrontが追加されたスタックです。
+CloudFrontを操作するためのプラグインの設定が必要となります。
+```
+kumogata create anegawa-hvm-aurora.rb STACKNAME \
+ -r REGION \
+-p "KeyName=KEYNAME,MySQLPassword=MYSQLPASS,MulitiAZDatabase=TRUE,RDSInstanceType=DB_INSTANCE_TYPE,InstanceType=EC2_INSTANCE_TYPE"
+```
+
+###Osaka(HVM)
+S3が追加されたスタックです。
+CloudFrontとS3を操作するためのプラグインの設定が必要となります。
+```
+kumogata create osaka-hvm-aurora.rb STACKNAME \
+ -r REGION \
+-p "KeyName=KEYNAME,MySQLPassword=MYSQLPASS,MulitiAZDatabase=TRUE,RDSInstanceType=DB_INSTANCE_TYPE,InstanceType=EC2_INSTANCE_TYPE"
+```
 
 ###Mikatagahara(HVM)
 CloudWatchによるリソース監視体制を追加する予定です。
-
-###Shizugatake(HVM)
-S3を追加する予定です。
 
 ###Tennosan(HVM)
 Elasticacheを追加する予定です。
