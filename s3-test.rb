@@ -29,4 +29,16 @@ Outputs do
       Fn__GetAtt "S3Media", "WebsiteURL"
     end
   end
+  CloudFrontAccessKey do
+    Description "This is CloudFront Access Key. Please set 'C3 CloudFlont Cache Clear' plugin on admin page."
+    Value do
+      Ref "IAMS3MediaAccessKey"
+    end
+  end
+  CloudFrontSecretKey do
+    Description "This is CloudFront Secret Key. Please set 'C3 CloudFlont Cache Clear' plugin on admin page."
+    Value do
+      Fn__GetAtt "IAMS3MediaAccessKey", "SecretAccessKey"
+    end
+  end
 end
