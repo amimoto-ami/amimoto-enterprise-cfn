@@ -26,60 +26,7 @@ Resources do
 end
 
 Outputs do
-  WebSiteURL do
-    Description "WordPress Site URL  (Please wait a few minutes for the upgrade of WordPress to access for the first time.)"
-    Value do
-      Fn__Join [
-        "",
-        [
-          "http://",
-          _{
-            Fn__GetAtt "CloudFront", "DomainName"
-          }
-        ]
-      ]
-    end
-  end
-  EC2InstanceId do
-    Description "Access for the first time, Please input it."
-    Value do
-      Ref "EC2"
-    end
-  end
-  CloudFrontDistributionId do
-    Description "This is CloudFront Disctribution ID. Please set 'C3 CloudFlont Cache Clear' plugin on admin page."
-    Value do
-      Ref "CloudFront"
-    end
-  end
-  CloudFrontAccessKey do
-    Description "This is CloudFront Access Key. Please set 'C3 CloudFlont Cache Clear' plugin on admin page."
-    Value do
-      Ref "IAMCfInvalidationAccessKey"
-    end
-  end
-  CloudFrontSecretKey do
-    Description "This is CloudFront Secret Key. Please set 'C3 CloudFlont Cache Clear' plugin on admin page."
-    Value do
-      Fn__GetAtt "IAMCfInvalidationAccessKey", "SecretAccessKey"
-    end
-  end
-  S3MediaBucketURL do
-    Description "This is S3 Bucket URL. Please set 'Nephila clavata' Plugin on admin page."
-    Value do
-      Fn__GetAtt "S3Media", "WebsiteURL"
-    end
-  end
-  S3MediaAccessKey do
-    Description "This is S3 Access Key. Please set 'Nephila clavata' plugin on admin page."
-    Value do
-      Ref "IAMS3MediaAccessKey"
-    end
-  end
-  S3MediaSecretKey do
-    Description "This is S3 Secret Key. Please set 'Nephila clavata' plugin on admin page."
-    Value do
-      Fn__GetAtt "IAMS3MediaAccessKey", "SecretAccessKey"
-    end
-  end
+  _include "outputs/ec2.rb"
+  _include "outputs/cloudfront.rb"
+  _include "outputs/s3.rb"
 end
