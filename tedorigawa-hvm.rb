@@ -21,6 +21,7 @@ Resources do
   _include "include/security_group.rb"
   _include "include/elb.rb"
   _include "include/rds_aurora/aurora.rb"
+  _include "include/cloudwatch/cw.rb"
 end
 
 Outputs do

@@ -19,4 +19,5 @@ Resources do
   _include "include/ec2/ec2.rb"
   _include "include/security_group.rb"
   _include "include/eip.rb"
+  _include "include/cloudwatch/cw.rb"
 end

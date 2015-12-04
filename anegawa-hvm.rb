@@ -22,6 +22,7 @@ Resources do
   _include "include/elb.rb"
   _include "include/rds/rds.rb"
   _include "include/cloudfront/cf.rb"
+  _include "include/cloudwatch/cw.rb"
 end
 
 Outputs do
