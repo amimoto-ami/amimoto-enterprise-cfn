@@ -5,6 +5,32 @@
 - staging :結合テスト
 - topicbranch :単体テスト
 
+##Params
+###KeyName
+**Required**
+SSH KeyName.
+
+###MailAddress
+**Required**
+Your Email Address.
+Send to CloudWatch Alert Mail.
+
+###InstanceType
+Default:t2.small
+EC2 Instance Size.
+
+##Stack List
+###Sardine
+This is Simple AMIMOTO Stack made by CloudFormation.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch.
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create sardine.rb sardine \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
 ##How To Build
 
 ###Simple EC2 Stack(HVM)

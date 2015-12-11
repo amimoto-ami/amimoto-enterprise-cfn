@@ -1,6 +1,4 @@
 _include 'include/iam/create-snapshot.rb'
-_include 'include/iam/cf-invalidation.rb'
-_include 'include/iam/s3-media.rb'
 
 IAMForEC2 do
   Type "AWS::IAM::InstanceProfile"
