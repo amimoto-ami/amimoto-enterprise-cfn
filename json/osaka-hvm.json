@@ -738,6 +738,14 @@
         ]
       }
     },
+    "S3Media": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html"
+        }
+      }
+    },
     "CloudFront": {
       "Type": "AWS::CloudFront::Distribution",
       "Properties": {

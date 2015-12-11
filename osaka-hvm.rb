@@ -21,6 +21,7 @@ Resources do
   _include "include/security_group.rb"
   _include "include/elb.rb"
   _include "include/rds/rds.rb"
+  _include "include/s3/s3-media.rb"
   _include "include/cloudfront/cf.rb"
   _include "include/cloudwatch/cw.rb"
 end
