@@ -31,6 +31,30 @@ kumogata create sardine.rb sardine \
    -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
 ```
 
+###Stack2（名前募集中）
+This is Powerful AMIMOTO Stack made by CloudFormation.
+Using CDN(CloudFront),the server is more durable.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch,CloudFront.
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack2.rb stack2 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
+###Stack3（名前募集中）
+This is Powerful AMIMOTO Stack made by CloudFormation.
+Using S3 & CDN, you can upload many media file.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch,CloudFront,S3.
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack3.rb stack3 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
 ##How To Build
 
 ###Simple EC2 Stack(HVM)
