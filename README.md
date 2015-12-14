@@ -16,8 +16,20 @@ Your Email Address.
 Send to CloudWatch Alert Mail.
 
 ###InstanceType
-Default:t2.small
+**Default:t2.small**
 EC2 Instance Size.
+
+###MySQLPassword
+**Required**
+RDS Database's PassWord
+
+###MulitiAZDatabase
+**Default: false**
+Define RDS Muliti-AZ Database.
+
+###RDSInstanceType
+**Default: db.m3.medium**
+RDS Instance Size.
 
 ##Stack List
 ###Sardine
@@ -53,6 +65,18 @@ Use service is VPC,EC2,EIP,CloudWatch,CloudFront,S3.
 kumogata create stack3.rb stack3 \
  -r REGION \
    -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
+###Stack4（名前募集中）
+This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.
+Added RDS, Database change more scalable.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch,CloudFront,S3,RDS(MariaDB).
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack4.rb stack4 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM,MySQLPassword=MYSQLPASS,MulitiAZDatabase=true,RDSInstanceType=DB_INSTANCE_TYPE"  --capabilities=CAPABILITY_IAM
 ```
 
 ##How To Build
