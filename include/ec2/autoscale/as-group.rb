@@ -1,5 +1,6 @@
 AutoScalingGroup do
   Type "AWS::AutoScaling::AutoScalingGroup"
+  DependsOn "AttachGatewayToVPC"
   Properties do
     AvailabilityZones [
       _{
@@ -14,12 +15,14 @@ AutoScalingGroup do
     DesiredCapacity "0"
     HealthCheckGracePeriod "300"
     HealthCheckType "EC2"
-    InstanceId do
-      Ref "EC2"
-    end
     LaunchConfigurationName do
       Ref "AutoScaleSetting"
     end
+    VPCZoneIdentifier [
+      _{
+        Ref "PublicSubnet"
+      }
+    ]
     LoadBalancerNames [
       _{
         Ref "ELB"
