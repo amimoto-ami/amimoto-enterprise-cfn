@@ -12,6 +12,16 @@ EC2 do
           _path("/etc/cron.d/create-snapshot") do
             content "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
           end
+          _path("/opt/aws/cf_option.json") do
+              content '{
+                "option" : {
+                  "cloudfront" : "true"
+                }
+              }'
+            mode "00644"
+            owner "root"
+            group "root"
+          end
         end
       end
     end
