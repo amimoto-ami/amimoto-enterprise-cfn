@@ -7,7 +7,7 @@ end
 
 MulitiAZDatabase do
   Description           "Crate a Multi-AZ RDS Database Instance"
-  Default               true
+  Default               false
   Type                  "String"
   AllowedValues         "true","false"
   ConstraintDescription "must be either true or false"

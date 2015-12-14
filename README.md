@@ -5,6 +5,80 @@
 - staging :結合テスト
 - topicbranch :単体テスト
 
+##Params
+###KeyName
+**Required**
+SSH KeyName.
+
+###MailAddress
+**Required**
+Your Email Address.
+Send to CloudWatch Alert Mail.
+
+###InstanceType
+**Default:t2.small**
+EC2 Instance Size.
+
+###MySQLPassword
+**Required**
+RDS Database's PassWord
+
+###MulitiAZDatabase
+**Default: false**
+Define RDS Muliti-AZ Database.
+
+###RDSInstanceType
+**Default: db.m3.medium**
+RDS Instance Size.
+
+##Stack List
+###Sardine
+This is Simple AMIMOTO Stack made by CloudFormation.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch.
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create sardine.rb sardine \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
+###Stack2（名前募集中）
+This is Powerful AMIMOTO Stack made by CloudFormation.
+Using CDN(CloudFront),the server is more durable.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch,CloudFront.
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack2.rb stack2 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
+###Stack3（名前募集中）
+This is Powerful AMIMOTO Stack made by CloudFormation.
+Using S3 & CDN, you can upload many media file.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch,CloudFront,S3.
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack3.rb stack3 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM"  --capabilities=CAPABILITY_IAM
+```
+
+###Stack4（名前募集中）
+This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.
+Added RDS, Database change more scalable.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,EIP,CloudWatch,CloudFront,S3,RDS(MariaDB).
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack4.rb stack4 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM,MySQLPassword=MYSQLPASS,MulitiAZDatabase=true,RDSInstanceType=DB_INSTANCE_TYPE"  --capabilities=CAPABILITY_IAM
+```
+
 ##How To Build
 
 ###Simple EC2 Stack(HVM)

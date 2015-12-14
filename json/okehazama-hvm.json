@@ -510,6 +510,27 @@
           }
         ]
       }
+    },
+    "CloudWatch": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "CPU Alarm For Your Instance.",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Maximum",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "85",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": {
+              "Ref": "EC2"
+            }
+          }
+        ]
+      }
     }
   },
   "Outputs": {
@@ -530,7 +551,7 @@
         ]
       }
     },
-    "InstanceId": {
+    "EC2InstanceId": {
       "Description": "Access for the first time, Please input it.",
       "Value": {
         "Ref": "EC2"

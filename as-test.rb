@@ -1,7 +1,8 @@
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
   This is Simple AMIMOTO Stack made by CloudFormation.
-  Named "OKEHAZAMA", Using ELB & Single EC2 stack.
+  Easy Setup and Automatic make Snapshot(2Days).
+  Use service is VPC,EC2,EIP,CloudWatch.
 EOS
 
 Mappings do
@@ -12,16 +13,17 @@ end
 Parameters do
   _include "params/keyname.rb"
   _include "params/ec2_instance.rb"
-  _include "params/aurora_settings.rb"
+  _include "params/alert_mail.rb"
 end
 
 Resources do
   _include 'include/vpc/vpc.rb'
-  _include "include/ec2/ec2-with-rds.rb"
+  _include "include/ec2/ec2.rb"
   _include "include/security_group.rb"
-  _include "include/elb.rb"
-  _include "include/rds_aurora/aurora.rb"
   _include "include/cloudwatch/cw.rb"
+  _include "include/sns/cw-alert.rb"
+  _include "include/elb.rb"
+  _include "include/ec2/autoscale/as.rb"
 end
 
 Outputs do

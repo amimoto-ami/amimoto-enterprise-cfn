@@ -2,9 +2,11 @@ CloudWatch do
   Type  "AWS::CloudWatch::Alarm"
   Properties do
     AlarmDescription "CPU Alarm For Your Instance."
-    #AlarmActions [
-    # Ref "AWS::SNS::TOPIC::RESOUCE::NAME"
-    #]
+    AlarmActions [
+      _{
+        Ref "SNSCwAlert"
+      }
+    ]
     MetricName "CPUUtilization"
     Namespace "AWS/EC2"
     Statistic "Maximum"

@@ -422,7 +422,7 @@
                 "content": "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
               },
               "/opt/aws/cloud_formation.json": {
-                "content": "{\n                \"rds\" : {\n                  \"database\" : \"wordpress\",\n                  \"username\" : \"amimoto\",\n                  \"password\" : \"{{password}}\",\n                  \"endpoint\" : \"{{endpoint}}\",\n                  \"port\"     : 3306\n                },\n                \"is-use\" : {\n                  \"cloudfront\" : \"true\"\n                }\n              }",
+                "content": "{\n                \"rds\" : {\n                  \"database\" : \"wordpress\",\n                  \"username\" : \"amimoto\",\n                  \"password\" : \"{{password}}\",\n                  \"endpoint\" : \"{{endpoint}}\",\n                  \"port\"     : 3306\n                },\n                \"is-use\" : {\n                  \"cloudfront\" : \"true\",\n                  \"s3media\" : \"true\",\n                }\n              }",
                 "context": {
                   "endpoint": {
                     "Fn::GetAtt": [
@@ -738,6 +738,14 @@
         ]
       }
     },
+    "S3Media": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html"
+        }
+      }
+    },
     "CloudFront": {
       "Type": "AWS::CloudFront::Distribution",
       "Properties": {
@@ -974,9 +982,36 @@
           ]
         }
       }
+    },
+    "CloudWatch": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "CPU Alarm For Your Instance.",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Maximum",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "85",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": {
+              "Ref": "EC2"
+            }
+          }
+        ]
+      }
     }
   },
   "Outputs": {
+    "EC2InstanceId": {
+      "Description": "Access for the first time, Please input it.",
+      "Value": {
+        "Ref": "EC2"
+      }
+    },
     "WebSiteURL": {
       "Description": "WordPress Site URL  (Please wait a few minutes for the upgrade of WordPress to access for the first time.)",
       "Value": {
@@ -992,12 +1027,6 @@
             }
           ]
         ]
-      }
-    },
-    "EC2InstanceId": {
-      "Description": "Access for the first time, Please input it.",
-      "Value": {
-        "Ref": "EC2"
       }
     },
     "CloudFrontDistributionId": {

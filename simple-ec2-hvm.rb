@@ -21,3 +21,7 @@ Resources do
   _include "include/eip.rb"
   _include "include/cloudwatch/cw.rb"
 end
+
+Outputs do
+  _include "outputs/ec2.rb"
+end
