@@ -1,0 +1,519 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This is Simple AMIMOTO Stack made by CloudFormation.\nVPC/PublicSubnet/EC2/EIP\n",
+  "Mappings": {
+    "MPAmimotov4": {
+      "us-east-1": {
+        "AMI": "ami-ca148fa2",
+        "Location": "Virginia"
+      },
+      "us-west-2": {
+        "AMI": "ami-83e8bfb3",
+        "Location": "Oregon"
+      },
+      "us-west-1": {
+        "AMI": "ami-950d1ed0",
+        "Location": "N.California"
+      },
+      "eu-west-1": {
+        "AMI": "ami-d275c8a5",
+        "Location": "EU_Ireland"
+      },
+      "ap-southeast-1": {
+        "AMI": "ami-bf725eed",
+        "Location": "Singapore"
+      },
+      "ap-southeast-2": {
+        "AMI": "ami-4fcfa675",
+        "Location": "Sydney"
+      },
+      "ap-northeast-1": {
+        "AMI": "ami-0e00030f",
+        "Location": "Tokyo"
+      },
+      "sa-east-1": {
+        "AMI": "ami-63de6e7e",
+        "Location": "Sao_Paul"
+      }
+    },
+    "AZs": {
+      "us-east-1": {
+        "PRI": "us-east-1d",
+        "SEC": "us-east-1c"
+      },
+      "us-west-2": {
+        "PRI": "us-west-2b",
+        "SEC": "us-west-2c"
+      },
+      "us-west-1": {
+        "PRI": "us-west-1c",
+        "SEC": "us-west-1b"
+      },
+      "eu-west-1": {
+        "PRI": "eu-west-1c",
+        "SEC": "eu-west-1b"
+      },
+      "ap-southeast-1": {
+        "PRI": "ap-southeast-1b",
+        "SEC": "ap-southeast-1a"
+      },
+      "ap-northeast-1": {
+        "PRI": "ap-northeast-1c",
+        "SEC": "ap-northeast-1a"
+      },
+      "ap-southeast-2": {
+        "PRI": "ap-southeast-2b",
+        "SEC": "ap-southeast-2a"
+      },
+      "sa-east-1": {
+        "PRI": "sa-east-1b",
+        "SEC": "sa-east-1a"
+      }
+    }
+  },
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "64",
+      "AllowedPattern": "[-_ a-zA-Z0-9]*",
+      "ConstraintDescription": "can contain only alphanumeric characters, spaces, dashes and underscores."
+    },
+    "InstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "Default": "t2.small",
+      "AllowedValues": [
+        "t2.small",
+        "t2.medium",
+        "t2.large",
+        "hi1.4xlarge",
+        "hs1.8xlarge",
+        "g2.2xlarge",
+        "m3.medium",
+        "m3.large",
+        "m3.xlarge",
+        "m3.2xlarge",
+        "i2.xlarge",
+        "i2.2xlarge",
+        "i2.4xlarge",
+        "i2.8xlarge",
+        "c3.large",
+        "c3.xlarge",
+        "c3.2xlarge",
+        "c3.4xlarge",
+        "c3.8xlarge",
+        "r3.large",
+        "r3.xlarge",
+        "r3.2xlarge",
+        "r3.4xlarge",
+        "r3.8xlarge"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type."
+    }
+  },
+  "Resources": {
+    "PublicSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "PRI"
+          ]
+        },
+        "MapPublicIpOnLaunch": "true",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "RouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "AssociationRtToPubSub": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet"
+        }
+      }
+    },
+    "InternetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "AttachGatewayToVPC": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "Route": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "InstanceTenancy": "default",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "SampleVPC"
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "IAMCreateSnapshotRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMCreateSnapshotPolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "iamtest",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:Describe*",
+                "ec2:CreateSnapshot",
+                "ec2:DeleteSnapshot"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "IAMCreateSnapshotRole"
+          }
+        ]
+      }
+    },
+    "IAMCfInvalidationRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/CloudFrontFullAccess"
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMCfInvalidationAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "Status": "Active",
+        "UserName": {
+          "Ref": "IAMCfInvalidationUser"
+        }
+      }
+    },
+    "IAMCfInvalidationUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Path": "/",
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/CloudFrontFullAccess",
+          "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+        ]
+      }
+    },
+    "IAMS3MediaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMS3MediaAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "Status": "Active",
+        "UserName": {
+          "Ref": "IAMS3MediaUser"
+        }
+      }
+    },
+    "IAMS3MediaUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Path": "/",
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        ]
+      }
+    },
+    "IAMForEC2": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "IAMCreateSnapshotRole"
+          }
+        ]
+      }
+    },
+    "EC2": {
+      "Type": "AWS::EC2::Instance",
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "config": {
+            "files": {
+              "/opt/local/create-snapshot.sh": {
+                "source": "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/create-snapshot.sh"
+              },
+              "/etc/cron.d/create-snapshot": {
+                "content": "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
+              }
+            }
+          }
+        }
+      },
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "PRI"
+          ]
+        },
+        "DisableApiTermination": "false",
+        "EbsOptimized": "false",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "MPAmimotov4",
+            {
+              "Ref": "AWS::Region"
+            },
+            "AMI"
+          ]
+        },
+        "InstanceInitiatedShutdownBehavior": "stop",
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "Monitoring": "false",
+        "SubnetId": {
+          "Ref": "PublicSubnet"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "Tenancy": "default",
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroup"
+          }
+        ],
+        "IamInstanceProfile": {
+          "Ref": "IAMForEC2"
+        },
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "/opt/aws/bin/cfn-init -s ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " -r EC2 ",
+                " --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                "\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "This is Simple SecurityGroup made by CloudFormation",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "EIP": {
+      "Type": "AWS::EC2::EIP",
+      "DependsOn": "AttachGatewayToVPC",
+      "Properties": {
+        "InstanceId": {
+          "Ref": "EC2"
+        },
+        "Domain": "vpc"
+      }
+    },
+    "CloudWatch": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "CPU Alarm For Your Instance.",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Maximum",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "85",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": {
+              "Ref": "EC2"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "EC2InstanceId": {
+      "Description": "Access for the first time, Please input it.",
+      "Value": {
+        "Ref": "EC2"
+      }
+    }
+  }
+}

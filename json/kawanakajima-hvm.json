@@ -1,0 +1,788 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This is Simple AMIMOTO Stack made by CloudFormation.\nNamed \"OKEHAZAMA\", Using ELB & Single EC2 stack.\n",
+  "Mappings": {
+    "MPAmimotov4": {
+      "us-east-1": {
+        "AMI": "ami-ca148fa2",
+        "Location": "Virginia"
+      },
+      "us-west-2": {
+        "AMI": "ami-83e8bfb3",
+        "Location": "Oregon"
+      },
+      "us-west-1": {
+        "AMI": "ami-950d1ed0",
+        "Location": "N.California"
+      },
+      "eu-west-1": {
+        "AMI": "ami-d275c8a5",
+        "Location": "EU_Ireland"
+      },
+      "ap-southeast-1": {
+        "AMI": "ami-bf725eed",
+        "Location": "Singapore"
+      },
+      "ap-southeast-2": {
+        "AMI": "ami-4fcfa675",
+        "Location": "Sydney"
+      },
+      "ap-northeast-1": {
+        "AMI": "ami-0e00030f",
+        "Location": "Tokyo"
+      },
+      "sa-east-1": {
+        "AMI": "ami-63de6e7e",
+        "Location": "Sao_Paul"
+      }
+    },
+    "AZs": {
+      "us-east-1": {
+        "PRI": "us-east-1d",
+        "SEC": "us-east-1c"
+      },
+      "us-west-2": {
+        "PRI": "us-west-2b",
+        "SEC": "us-west-2c"
+      },
+      "us-west-1": {
+        "PRI": "us-west-1c",
+        "SEC": "us-west-1b"
+      },
+      "eu-west-1": {
+        "PRI": "eu-west-1c",
+        "SEC": "eu-west-1b"
+      },
+      "ap-southeast-1": {
+        "PRI": "ap-southeast-1b",
+        "SEC": "ap-southeast-1a"
+      },
+      "ap-northeast-1": {
+        "PRI": "ap-northeast-1c",
+        "SEC": "ap-northeast-1a"
+      },
+      "ap-southeast-2": {
+        "PRI": "ap-southeast-2b",
+        "SEC": "ap-southeast-2a"
+      },
+      "sa-east-1": {
+        "PRI": "sa-east-1b",
+        "SEC": "sa-east-1a"
+      }
+    }
+  },
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "64",
+      "AllowedPattern": "[-_ a-zA-Z0-9]*",
+      "ConstraintDescription": "can contain only alphanumeric characters, spaces, dashes and underscores."
+    },
+    "InstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "Default": "t2.small",
+      "AllowedValues": [
+        "t2.small",
+        "t2.medium",
+        "t2.large",
+        "hi1.4xlarge",
+        "hs1.8xlarge",
+        "g2.2xlarge",
+        "m3.medium",
+        "m3.large",
+        "m3.xlarge",
+        "m3.2xlarge",
+        "i2.xlarge",
+        "i2.2xlarge",
+        "i2.4xlarge",
+        "i2.8xlarge",
+        "c3.large",
+        "c3.xlarge",
+        "c3.2xlarge",
+        "c3.4xlarge",
+        "c3.8xlarge",
+        "r3.large",
+        "r3.xlarge",
+        "r3.2xlarge",
+        "r3.4xlarge",
+        "r3.8xlarge"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type."
+    },
+    "MySQLPassword": {
+      "Description": "Password of RDS User",
+      "Type": "String",
+      "MinLength": "8",
+      "MaxLength": "64"
+    },
+    "MulitiAZDatabase": {
+      "Description": "Crate a Multi-AZ RDS Database Instance",
+      "Default": "true",
+      "Type": "String",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "must be either true or false"
+    },
+    "RDSInstanceType": {
+      "Description": "RDS Instance Type",
+      "Default": "db.m3.medium",
+      "Type": "String",
+      "AllowedValues": [
+        "db.t2.micro",
+        "db.t2.small",
+        "db.t2.medium",
+        "db.m1.small",
+        "db.m1.medium",
+        "db.m1.large",
+        "db.m1.xlarge",
+        "db.m3.medium",
+        "db.m3.large",
+        "db.m3.xlarge",
+        "db.m3.2xlarge",
+        "db.m2.xlarge",
+        "db.m2.2xlarge",
+        "db.m2.4xlarge",
+        "db.r3.large",
+        "db.r3.xlarge",
+        "db.r3.2xlarge",
+        "db.r3.4xlarge",
+        "db.r3.8xlarge"
+      ],
+      "ConstraintDescription": "Must be a valid RDS Instance Type."
+    },
+    "DBAllocatedStorage": {
+      "Default": "20",
+      "Description": "The size of the database (Gb)",
+      "Type": "Number",
+      "MinValue": "5",
+      "MaxValue": "3072",
+      "ConstraintDescription": "must be between 5 and 3072Gb."
+    }
+  },
+  "Resources": {
+    "PublicSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "PRI"
+          ]
+        },
+        "MapPublicIpOnLaunch": "true",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "RouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "AssociationRtToPubSub": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet"
+        }
+      }
+    },
+    "InternetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "AttachGatewayToVPC": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "Route": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "InstanceTenancy": "default",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "SampleVPC"
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "IAMCreateSnapshotRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMCreateSnapshotPolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "iamtest",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:Describe*",
+                "ec2:CreateSnapshot",
+                "ec2:DeleteSnapshot"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "IAMCreateSnapshotRole"
+          }
+        ]
+      }
+    },
+    "IAMCfInvalidationRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/CloudFrontFullAccess"
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMCfInvalidationAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "Status": "Active",
+        "UserName": {
+          "Ref": "IAMCfInvalidationUser"
+        }
+      }
+    },
+    "IAMCfInvalidationUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Path": "/",
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/CloudFrontFullAccess",
+          "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+        ]
+      }
+    },
+    "IAMS3MediaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMS3MediaAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "Status": "Active",
+        "UserName": {
+          "Ref": "IAMS3MediaUser"
+        }
+      }
+    },
+    "IAMS3MediaUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Path": "/",
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        ]
+      }
+    },
+    "IAMForEC2": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "IAMCreateSnapshotRole"
+          }
+        ]
+      }
+    },
+    "EC2": {
+      "Type": "AWS::EC2::Instance",
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "config": {
+            "files": {
+              "/opt/local/create-snapshot.sh": {
+                "source": "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/create-snapshot.sh"
+              },
+              "/etc/cron.d/create-snapshot": {
+                "content": "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
+              },
+              "/opt/aws/cloud_formation.json": {
+                "content": "{\n                \"rds\" : {\n                  \"database\" : \"wordpress\",\n                  \"username\" : \"amimoto\",\n                  \"password\" : \"{{password}}\",\n                  \"endpoint\" : \"{{endpoint}}\",\n                  \"port\"     : 3306\n                },\n                \"is-use\" : {\n                  \"cloudfront\" : \"true\",\n                  \"s3media\" : \"true\",\n                }\n              }",
+                "context": {
+                  "endpoint": {
+                    "Fn::GetAtt": [
+                      "RDS",
+                      "Endpoint.Address"
+                    ]
+                  },
+                  "password": {
+                    "Ref": "MySQLPassword"
+                  },
+                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)"
+                },
+                "mode": "00644",
+                "owner": "root",
+                "group": "root"
+              }
+            }
+          }
+        }
+      },
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "PRI"
+          ]
+        },
+        "DisableApiTermination": "false",
+        "EbsOptimized": "false",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "MPAmimotov4",
+            {
+              "Ref": "AWS::Region"
+            },
+            "AMI"
+          ]
+        },
+        "InstanceInitiatedShutdownBehavior": "stop",
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "Monitoring": "false",
+        "SubnetId": {
+          "Ref": "PublicSubnet"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          },
+          {
+            "Key": "HasRDS?",
+            "Value": "true"
+          }
+        ],
+        "Tenancy": "default",
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "/opt/aws/bin/cfn-init -s ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " -r EC2 ",
+                " --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                "\n"
+              ]
+            ]
+          }
+        },
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroup"
+          }
+        ],
+        "IamInstanceProfile": {
+          "Ref": "IAMForEC2"
+        }
+      }
+    },
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "This is Simple SecurityGroup made by CloudFormation",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "ELB": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "Subnets": [
+          {
+            "Ref": "PublicSubnet"
+          }
+        ],
+        "HealthCheck": {
+          "HealthyThreshold": "2",
+          "Interval": "30",
+          "Target": "TCP:80",
+          "Timeout": "10",
+          "UnhealthyThreshold": "2"
+        },
+        "Listeners": [
+          {
+            "InstancePort": "80",
+            "LoadBalancerPort": "80",
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
+          }
+        ],
+        "Instances": [
+          {
+            "Ref": "EC2"
+          }
+        ],
+        "SecurityGroups": [
+          {
+            "Ref": "SecurityGroup"
+          }
+        ]
+      }
+    },
+    "RDSSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.1.0/24",
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "PRI"
+          ]
+        },
+        "MapPublicIpOnLaunch": "false",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "RDSSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.2.0/24",
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "SEC"
+          ]
+        },
+        "MapPublicIpOnLaunch": "false",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "DBSubnetGroup": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets available for the RDS DB Instance",
+        "SubnetIds": [
+          {
+            "Ref": "RDSSubnet1"
+          },
+          {
+            "Ref": "RDSSubnet2"
+          }
+        ]
+      }
+    },
+    "RDSSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "This is Simple RDS SecurityGroup made by CloudFormation",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3306",
+            "ToPort": "3306",
+            "SourceSecurityGroupId": {
+              "Ref": "SecurityGroup"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3306",
+            "ToPort": "3306",
+            "SourceSecurityGroupId": {
+              "Ref": "SecurityGroup"
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "RDS": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "AllocatedStorage": {
+          "Ref": "DBAllocatedStorage"
+        },
+        "AllowMajorVersionUpgrade": "true",
+        "AutoMinorVersionUpgrade": "true",
+        "AvailabilityZone": {
+          "Fn::FindInMap": [
+            "AZs",
+            {
+              "Ref": "AWS::Region"
+            },
+            "PRI"
+          ]
+        },
+        "BackupRetentionPeriod": "1",
+        "DBInstanceClass": {
+          "Ref": "RDSInstanceType"
+        },
+        "DBName": "wordpress",
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroup"
+        },
+        "Engine": "MariaDB",
+        "MasterUsername": "amimoto",
+        "MasterUserPassword": {
+          "Ref": "MySQLPassword"
+        },
+        "MultiAZ": {
+          "Ref": "MulitiAZDatabase"
+        },
+        "Port": "3306",
+        "PreferredBackupWindow": "00:00-00:30",
+        "PreferredMaintenanceWindow": "sun:16:00-sun:17:30",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VPCSecurityGroups": [
+          {
+            "Ref": "RDSSecurityGroup"
+          }
+        ]
+      }
+    },
+    "CloudWatch": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "CPU Alarm For Your Instance.",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Maximum",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "85",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": {
+              "Ref": "EC2"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "WebSiteURL": {
+      "Description": "WordPress Site URL  (Please wait a few minutes for the upgrade of WordPress to access for the first time.)",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "http://",
+            {
+              "Fn::GetAtt": [
+                "ELB",
+                "DNSName"
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    "EC2InstanceId": {
+      "Description": "Access for the first time, Please input it.",
+      "Value": {
+        "Ref": "EC2"
+      }
+    }
+  }
+}
