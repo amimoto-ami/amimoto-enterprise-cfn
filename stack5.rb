@@ -30,9 +30,7 @@ Resources do
   _include 'include/iam/s3-media.rb'
   _include "include/cloudfront/cf.rb"
   _include "include/s3/s3-media.rb"
-  _include "include/sns/autoscale.rb"
-  _include "include/ec2/autoscale/as-group.rb"
-  _include "include/ec2/autoscale/as-setting.rb"
+  _include "include/ec2/autoscale/as.rb"
 end
 
 Outputs do

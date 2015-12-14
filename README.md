@@ -79,6 +79,19 @@ kumogata create stack4.rb stack4 \
    -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM,MySQLPassword=MYSQLPASS,MulitiAZDatabase=true,RDSInstanceType=DB_INSTANCE_TYPE"  --capabilities=CAPABILITY_IAM
 ```
 
+###Stack5（名前募集中）
+This is Scalable AMIMOTO Stack made by CloudFormation.
+Using AutoScale, Your Server is automatic scale ,if more traffic comes.
+Easy Setup and Automatic make Snapshot(2Days).
+Use service is VPC,EC2,AutoScale,EIP,CloudWatch,CloudFront,S3,RDS(MariaDB).
+![Simple EC2 Stack構成イメージ](img/simple-ec2.png "Simple EC2 Stack構成イメージ")
+```
+kumogata create stack5.rb stack4 \
+ -r REGION \
+   -p "KeyName=KEYNAME,InstanceType=INSTANCE_TYPE,MailAddress=example@EXAMPLE.COM,MySQLPassword=MYSQLPASS,MulitiAZDatabase=true,RDSInstanceType=DB_INSTANCE_TYPE"  --capabilities=CAPABILITY_IAM
+```
+
+
 ##How To Build
 
 ###Simple EC2 Stack(HVM)
