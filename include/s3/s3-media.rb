@@ -5,6 +5,7 @@ S3Media do
       IndexDocument "index.html"
     end
   end
+  DeletionPolicy "Retain"
 end
 
 ##@TODO アクセス許可の設定が必要
