@@ -6,6 +6,7 @@ IAMPolicyForS3Media do
       Version "2012-10-17"
       Statement [
         _{
+          ## 全体リスト取得、ただしアクセス権があるものに限る
           Effect "Allow"
           Action [
             "s3:ListAllMyBuckets"
@@ -23,6 +24,7 @@ IAMPolicyForS3Media do
           end
         },
         _{
+          ## バケット内の操作を許可する
           Effect "Allow"
           Action [
             "s3:PutObject",
@@ -43,6 +45,7 @@ IAMPolicyForS3Media do
           end
         },
         _{
+          ## 指定時のListBucketと、URLの取得を許可する
           Effect "Allow"
           Action [
             "s3:ListBucket",
@@ -55,8 +58,7 @@ IAMPolicyForS3Media do
                 "arn:aws:s3:::",
                 _{
                   Ref "S3Media"
-                },
-                "/*"
+                }
               ]
             ]
           end
