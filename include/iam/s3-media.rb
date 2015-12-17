@@ -1,7 +1,11 @@
+_include "include/iam/policies/s3-bucket.rb"
+
 IAMS3MediaRole do
   Type "AWS::IAM::Role"
   Properties do
-    ManagedPolicyArns ["arn:aws:iam::aws:policy/AmazonS3FullAccess"]
+    ManagedPolicyArns [
+      _{ Ref "IAMPolicyForS3Media" }
+    ]
     AssumeRolePolicyDocument do
       Version "2012-10-17"
       Statement do
@@ -33,7 +37,7 @@ IAMS3MediaUser do
   Properties do
     Path "/"
     ManagedPolicyArns [
-      "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+      _{ Ref "IAMPolicyForS3Media" }
     ]
   end
 end
