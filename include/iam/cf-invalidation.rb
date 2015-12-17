@@ -1,7 +1,13 @@
+_include "include/iam/policies/allow-invalidation.rb"
+
 IAMCfInvalidationRole do
   Type "AWS::IAM::Role"
   Properties do
-    ManagedPolicyArns ["arn:aws:iam::aws:policy/CloudFrontFullAccess"]
+    ManagedPolicyArns [
+      _{
+        Ref "IAMPolicyForCloudFront"
+      }
+    ]
     AssumeRolePolicyDocument do
       Version "2012-10-17"
       Statement do
@@ -33,8 +39,9 @@ IAMCfInvalidationUser do
   Properties do
     Path "/"
     ManagedPolicyArns [
-      "arn:aws:iam::aws:policy/CloudFrontFullAccess",
-      "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+      _{
+        Ref "IAMPolicyForCloudFront"
+      }
     ]
   end
 end
