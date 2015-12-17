@@ -15,10 +15,7 @@ IAMPolicyForS3Media do
             Fn__Join [
               "",
               [
-                "arn:aws:s3:::*",
-                _{
-                  Ref "S3Media"
-                }
+                "arn:aws:s3:::*"
               ]
             ]
           end
