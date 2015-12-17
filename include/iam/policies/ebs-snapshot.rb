@@ -14,8 +14,8 @@ IAMPolicyForSnapShot do
             "ec2:DeleteSnapshot",
             "ec2:CreateTags"
           ]
-          Resource do[
-            Fn__Join [
+          Resource [
+            _{ Fn__Join [
               ":",
               [
                 "arn:aws:ec2:",
@@ -23,8 +23,8 @@ IAMPolicyForSnapShot do
                 _{ Ref "AWS::AccountId" },
                 "instance/*"
               ]
-            ],
-            Fn__Join [
+            ]},
+            _{ Fn__Join [
               ":",
               [
                 "arn:aws:ec2:",
@@ -32,8 +32,8 @@ IAMPolicyForSnapShot do
                 _{ Ref "AWS::AccountId" },
                 "snapshot/*"
               ]
-            ],
-            Fn__Join [
+            ]},
+            _{Fn__Join [
               ":",
               [
                 "arn:aws:ec2:",
@@ -41,9 +41,8 @@ IAMPolicyForSnapShot do
                 _{ Ref "AWS::AccountId" },
                 "volume/*"
               ]
-            ]
+            ]}
           ]
-          end
         }
       ]
     end
