@@ -2,6 +2,9 @@ _include 'include/iam/policies/ebs-snapshot.rb'
 
 IAMCreateSnapshotRole do
   Type "AWS::IAM::Role"
+  DependsOn [
+    "IAMPolicyForSnapShot"
+  ]
   Properties do
     ManagedPolicyArns [
       _{ Ref "IAMPolicyForSnapShot" }
