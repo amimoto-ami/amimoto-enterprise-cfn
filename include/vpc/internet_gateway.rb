@@ -1,4 +1,5 @@
 InternetGateway do
+  DependsOn "VPC"
   Type "AWS::EC2::InternetGateway"
   Properties do
     Tags [
@@ -13,6 +14,10 @@ InternetGateway do
 end
 
 AttachGatewayToVPC do
+  DependsOn [
+    "VPC",
+    "InternetGateway"
+  ]
   Type "AWS::EC2::VPCGatewayAttachment"
   Properties do
     InternetGatewayId do

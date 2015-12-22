@@ -1,6 +1,11 @@
+_include 'include/iam/policies/ebs-snapshot.rb'
+
 IAMCreateSnapshotRole do
   Type "AWS::IAM::Role"
   Properties do
+    ManagedPolicyArns [
+      _{ Ref "IAMPolicyForSnapShot" }
+    ]
     AssumeRolePolicyDocument do
       Version "2012-10-17"
       Statement do
@@ -14,31 +19,5 @@ IAMCreateSnapshotRole do
       end
     end
     Path "/"
-  end
-end
-
-IAMCreateSnapshotPolicies do
-  Type "AWS::IAM::Policy"
-  Properties do
-    PolicyName "iamtest"
-    PolicyDocument do
-      Version "2012-10-17"
-      Statement [
-        _{
-          Effect "Allow"
-          Action [
-            "ec2:Describe*",
-            "ec2:CreateSnapshot",
-            "ec2:DeleteSnapshot"
-          ]
-          Resource "*"
-        }
-      ]
-    end
-    Roles [
-      _{
-        Ref "IAMCreateSnapshotRole"
-      }
-    ]
   end
 end

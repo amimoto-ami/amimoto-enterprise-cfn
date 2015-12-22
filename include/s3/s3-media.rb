@@ -5,8 +5,8 @@ S3Media do
       IndexDocument "index.html"
     end
   end
+  ## テンプレート削除時にバケットは残す
+  DeletionPolicy "Retain"
 end
 
-##@TODO アクセス許可の設定が必要
-##@TODO 絡新婦用のIAMロールの作成
 ##@TODO EC2アタッチ済みのロールに上記ロール追加
