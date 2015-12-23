@@ -1,5 +1,3 @@
-_include 'include/iam/ec2attached.rb'
-
 EC2 do
   Type "AWS::EC2::Instance"
   Metadata do
