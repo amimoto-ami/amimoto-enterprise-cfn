@@ -1,6 +1,5 @@
 IAMPolicyForS3Media do
   Type "AWS::IAM::ManagedPolicy"
-  DependsOn "IAMS3MediaRole"
   Properties do
     Description "Allow manage object under specific bucket"
     PolicyDocument do

@@ -1,9 +1,5 @@
 IAMPolicyForSnapShot do
   Type "AWS::IAM::ManagedPolicy"
-  DependsOn [
-    "IAMForEC2",
-    "IAMCreateSnapshotRole"
-  ]
   Properties do
     Description "Allow create snapshot from inner an instance"
     PolicyDocument do

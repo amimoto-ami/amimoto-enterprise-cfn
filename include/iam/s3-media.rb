@@ -2,6 +2,7 @@ _include "include/iam/policies/s3-bucket.rb"
 
 IAMS3MediaRole do
   Type "AWS::IAM::Role"
+  DependsOn "IAMPolicyForS3Media"
   Properties do
     ManagedPolicyArns [
       _{ Ref "IAMPolicyForS3Media" }
@@ -19,25 +20,5 @@ IAMS3MediaRole do
       end
     end
     Path "/"
-  end
-end
-
-IAMS3MediaAccessKey do
-  Type "AWS::IAM::AccessKey"
-  Properties do
-    Status "Active"
-    UserName do
-      Ref "IAMS3MediaUser"
-    end
-  end
-end
-
-IAMS3MediaUser do
-  Type "AWS::IAM::User"
-  Properties do
-    Path "/"
-    ManagedPolicyArns [
-      _{ Ref "IAMPolicyForS3Media" }
-    ]
   end
 end

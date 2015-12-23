@@ -2,6 +2,7 @@ _include "include/iam/policies/allow-invalidation.rb"
 
 IAMCfInvalidationRole do
   Type "AWS::IAM::Role"
+  DependsOn "IAMPolicyForCloudFront"
   Properties do
     ManagedPolicyArns [
       _{
@@ -21,27 +22,5 @@ IAMCfInvalidationRole do
       end
     end
     Path "/"
-  end
-end
-
-IAMCfInvalidationAccessKey do
-  Type "AWS::IAM::AccessKey"
-  Properties do
-    Status "Active"
-    UserName do
-      Ref "IAMCfInvalidationUser"
-    end
-  end
-end
-
-IAMCfInvalidationUser do
-  Type "AWS::IAM::User"
-  Properties do
-    Path "/"
-    ManagedPolicyArns [
-      _{
-        Ref "IAMPolicyForCloudFront"
-      }
-    ]
   end
 end

@@ -1,6 +1,5 @@
 IAMPolicyForCloudFront do
   Type "AWS::IAM::ManagedPolicy"
-  DependsOn "IAMCfInvalidationRole"
   Properties do
     Description "Allow invalidation"
     PolicyDocument do
