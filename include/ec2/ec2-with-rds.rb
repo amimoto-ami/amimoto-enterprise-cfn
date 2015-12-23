@@ -6,12 +6,6 @@ EC2 do
     AWS__CloudFormation__Init do
       config do
         files do
-          _path("/opt/local/create-snapshot.sh") do
-            source "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/create-snapshot.sh"
-          end
-          _path("/etc/cron.d/create-snapshot") do
-            content "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
-          end
           _path("/opt/aws/cf_option.json") do
               content '{
                 "option" : {
