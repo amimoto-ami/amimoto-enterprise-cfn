@@ -26,6 +26,8 @@ IAMPolicyForS3Media do
           Action [
             "s3:PutObject",
             "s3:GetObject",
+            "s3:PutObjectAcl",
+            "s3:GetObjectAcl",
             "s3:DeleteObject"
           ]
           Resource do
