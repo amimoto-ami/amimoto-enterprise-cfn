@@ -1,7 +1,7 @@
 AZs(
   {"us-east-1"=>{"PRI"=>"us-east-1d", "SEC"=>"us-east-1c"},
    "us-west-2"=>{"PRI"=>"us-west-2b", "SEC"=>"us-west-2c"},
-   "us-west-1"=>{"PRI"=>"us-west-1c", "SEC"=>"us-west-1b"},
+   "us-west-1"=>{"PRI"=>"us-west-1a", "SEC"=>"us-west-1c"},
    "eu-west-1"=>{"PRI"=>"eu-west-1c", "SEC"=>"eu-west-1b"},
    "ap-southeast-1"=>{"PRI"=>"ap-southeast-1b", "SEC"=>"ap-southeast-1a"},
    "ap-northeast-1"=>{"PRI"=>"ap-northeast-1c", "SEC"=>"ap-northeast-1a"},
