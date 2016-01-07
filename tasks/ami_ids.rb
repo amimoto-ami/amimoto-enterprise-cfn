@@ -16,6 +16,18 @@ namespace :ami do
     puts ERB.new(template, nil, '-').result(binding)
   end
 
+  desc "show list of AZs"
+  task :az do
+
+    client = ::Aws::EC2::Client.new(region: "us-east-1")
+    list_regions.map do |region|
+      print region + ": "
+      puts client.describe_availability_zones.availability_zones.map {|az|
+        az.zone_name
+      }.to_s
+    end
+  end
+
   def list_regions
      regions = ::Aws::EC2::Client.new(region: "us-east-1").describe_regions.regions
      regions.map {|region| region.region_name}
