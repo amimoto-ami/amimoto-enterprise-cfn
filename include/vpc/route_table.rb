@@ -1,5 +1,6 @@
 RouteTable do
   Type "AWS::EC2::RouteTable"
+  DeletionPolicy "Retain"
   Properties do
     VpcId do
       Ref "VPC"

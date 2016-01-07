@@ -5,6 +5,7 @@ _include 'include/vpc/internet_gateway.rb'
 _include 'include/vpc/route.rb'
 VPC do
   Type "AWS::EC2::VPC"
+  DeletionPolicy "Retain"
   Properties do
     CidrBlock "10.0.0.0/16"
     InstanceTenancy "default"
@@ -13,7 +14,9 @@ VPC do
     Tags [
       _{
         Key "Name"
-        Value "SampleVPC"
+        Value do
+          Ref "AWS::StackName"
+        end
       },
       _{
         Key "Application"
