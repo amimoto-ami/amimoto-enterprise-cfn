@@ -1,3 +1,6 @@
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new('spec')
-task :default => :spec
+require_relative 'tasks/ami_ids.rb'
+# require_relative 'tasks/builder.rb'
+
+
+task :default
+
