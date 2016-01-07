@@ -1,5 +1,6 @@
 InternetGateway do
   DependsOn "VPC"
+  DeletionPolicy "Retain"
   Type "AWS::EC2::InternetGateway"
   Properties do
     Tags [
@@ -19,6 +20,7 @@ AttachGatewayToVPC do
     "InternetGateway"
   ]
   Type "AWS::EC2::VPCGatewayAttachment"
+  DeletionPolicy "Retain"
   Properties do
     InternetGatewayId do
       Ref "InternetGateway"
