@@ -2,7 +2,8 @@
 source "https://rubygems.org"
 
 gem 'kumogata'
-gem 'awspec'
+gem 'amino'
+gem 'rake'
 
 group :development do
   gem 'pry'
