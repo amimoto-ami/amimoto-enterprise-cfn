@@ -26,7 +26,7 @@ CloudFront do
       ]
       PriceClass "PriceClass_200"
       Enabled true
-      Comment "Sample CloudFront."
+      Comment "Created by AMIMOTO CloudFormation."
       DefaultRootObject "index.php"
       DefaultCacheBehavior do
         SmoothStreaming false
