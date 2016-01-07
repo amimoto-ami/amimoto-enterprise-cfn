@@ -7,6 +7,9 @@
 
 ##Stack List
 ###Simple AMIMOTO Stack(HVM)
+AMIMOTOを高いパフォーマンスで稼働させる最もシンプルなCloudFormationスタックです。
+RDSやS3を活用することで高い耐障害性を実現し、CloudFrontによる負荷削減にも対応。
+
 
 ####Topology Diagram
 ![Topology Diagram](img/stack001.png "Topology Diagram")
@@ -19,22 +22,11 @@ kumogata create stack001.rb STACKNAME \
 
 
 ##Params
-###KeyName
-**Required**
-SSH KeyName.
 
-###InstanceType
-**Default:t2.small**
-EC2 Instance Size.
-
-###MySQLPassword
-**Required**
-RDS Database's PassWord
-
-###MulitiAZDatabase
-**Default: false**
-Define RDS Muliti-AZ Database.
-
-###RDSInstanceType
-**Default: db.m3.medium**
-RDS Instance Size.
+|Param Name|Default or Required|Description|
+|:--|:--|
+|KeyName|**Required**|SSH KeyName.|
+|InstanceType|**Default:t2.small**|EC2 Instance Size.|
+|MySQLPassword|**Required**|Database Password.|
+|MulitiAZDatabase|**Default: false**|Define RDS Muliti-AZ Database.|
+|RDSInstanceType|**Default: db.m3.medium**|RDS Instance Size.|
