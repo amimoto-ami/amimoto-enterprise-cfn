@@ -1,12 +1,14 @@
 MPAmimotov4(
   {
-  "us-east-1"=>{"AMI"=>"ami-ca148fa2", "Location"=>"Virginia"},
-  "us-west-2"=>{"AMI"=>"ami-83e8bfb3", "Location"=>"Oregon"},
-  "us-west-1"=>{"AMI"=>"ami-950d1ed0", "Location"=>"N.California"},
-  "eu-west-1"=>{"AMI"=>"ami-d275c8a5", "Location"=>"EU_Ireland"},
-  "ap-southeast-1"=>{"AMI"=>"ami-bf725eed", "Location"=>"Singapore"},
-  "ap-southeast-2"=>{"AMI"=>"ami-4fcfa675", "Location"=>"Sydney"},
-  "ap-northeast-1"=>{"AMI"=>"ami-0e00030f", "Location"=>"Tokyo"},
-  "sa-east-1"=>{"AMI"=>"ami-63de6e7e", "Location"=>"Sao_Paul"}
+  "us-east-1"=>{"AMI"=>"ami-7c166716", "Location"=>"Virginia"},
+  "us-west-2"=>{"AMI"=>"ami-2874991b", "Location"=>"Oregon"},
+  "us-west-1"=>{"AMI"=>"ami-b2b4d8d2", "Location"=>"N.California"},
+  "eu-central-1"=>{"AMI"=>"ami-a6bcacca", "Location"=>"EU_Frankfurt"}
+  "eu-west-1"=>{"AMI"=>"ami-2b75a958", "Location"=>"EU_Ireland"},
+  "ap-southeast-1"=>{"AMI"=>"ami-ff86419c", "Location"=>"Singapore"},
+  "ap-southeast-2"=>{"AMI"=>"ami-7085da13", "Location"=>"Sydney"},
+  "ap-northeast-1"=>{"AMI"=>"ami-e6da8088", "Location"=>"Tokyo"},
+  "ap-northeast-2"=>{"AMI"=>"ami-259d534b", "Location"=>"Seoul"},
+  "sa-east-1"=>{"AMI"=>"ami-12338b7e", "Location"=>"Sao_Paul"}
  }
 )
