@@ -7,9 +7,30 @@
 
 ##Stack List
 ###Simple AMIMOTO Stack(HVM)
-AMIMOTOを高いパフォーマンスで稼働させる最もシンプルなCloudFormationスタックです。
-RDSやS3を活用することで高い耐障害性を実現し、CloudFrontによる負荷削減にも対応。
+###Title
 
+>Title	of	the	topology,		This	appears	in	the	detail	page,	fulfillment	page,	and	pop	up	that	shows	the	topology	details
+
+###Option Order
+*何書けばいいんだろう・・・*
+####ドキュメント引用
+>If	product	contains cluster	options, specify	the	order	to	display
+
+
+###Short Description(JA)
+WordPressをより高いパフォーマンスで運用できる最もシンプルなCloudFormationスタックです。
+ハイパフォーマンスを発揮できるようにチューニングされたAMIMOTO AMIとAWSサービスを組み合わせることで、
+高い耐障害性を持つハイパフォーマンスなWordPressサイトを実現します。
+
+
+###Description(JA)
+WordPressを高いパフォーマンスと耐障害性で運用するために開発されたCloudFormationスタックです。
+RDSにDBデータ、S3にメディアファイルを保存することでWordPressが稼働するサーバーに障害が発生した場合にも簡単に復旧することが可能となりました。
+またCloudFrontをサイトの前面に設置することでサーバーへの負荷を削減し、同時に海外からのアクセスにも低いレイテンシで対応します。
+WordPressが稼働するEC2サーバーには徹底したチューニングが実施されたAMIMOTO AMIを使用、
+大規模Webサイトの運用にも耐えることができるWordPressインフラストラクチャを簡単に構築することが可能です。
+
+###Description
 
 ####Topology Diagram
 ![Topology Diagram](img/stack001.png "Topology Diagram")
@@ -23,10 +44,10 @@ kumogata create stack001.rb STACKNAME \
 
 ##Params
 
-|Param Name|Default or Required|Description|
+| Param Name | Default or Required | Description |
 |:--|:--|
-|KeyName|**Required**|SSH KeyName.|
-|InstanceType|**Default:t2.small**|EC2 Instance Size.|
-|MySQLPassword|**Required**|Database Password.|
-|MulitiAZDatabase|**Default: false**|Define RDS Muliti-AZ Database.|
-|RDSInstanceType|**Default: db.m3.medium**|RDS Instance Size.|
+| KeyName | **Required** | SSH KeyName. |
+| InstanceType | **Default:t2.small** | EC2 Instance Size. |
+| MySQLPassword | **Required** | Database Password. |
+| MulitiAZDatabase | **Default: false** | Define RDS Muliti-AZ Database. |
+| RDSInstanceType | **Default: db.m3.medium** | RDS Instance Size. |
