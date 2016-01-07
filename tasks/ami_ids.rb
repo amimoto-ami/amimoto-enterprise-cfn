@@ -34,7 +34,7 @@ namespace :ami do
   end
 
   def retrieve_id_by_amino(region, query)
-    ami = Amino({'name' => query, 'product-code.type' => "marketplace"}, {region: region}).first
+    ami = Amino({'name' => query, 'product-code.type' => "marketplace"}, {region: region}).last
     $stderr.puts [region, ami.name, ami.creation_date].join(": ")
     ami.image_id
   end
