@@ -9,10 +9,9 @@ namespace :ami do
     template = File.read('./tasks/ami_template.erb')
 
     list_regions.map do |region|
-      amis[region] = {
-        "AMI" => retrieve_id_by_amino(region, args['query'])
-      }
+      amis[region] = retrieve_id_by_amino(region, args['query'])
     end
+    puts amis
     $stderr.puts "============="
     puts ERB.new(template, nil, '-').result(binding)
   end
