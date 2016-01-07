@@ -1,38 +1,46 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "This is Simple AMIMOTO Stack made by CloudFormation.\nNamed \"Anegawa\", Using ELB & Single EC2 & RDS + CloudFront stack.\n",
+  "Description": "This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nEasy Setup and Automatic make Snapshot(2Days).\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "us-east-1": {
-        "AMI": "ami-ca148fa2",
+        "AMI": "ami-7c166716",
         "Location": "Virginia"
       },
       "us-west-2": {
-        "AMI": "ami-83e8bfb3",
+        "AMI": "ami-2874991b",
         "Location": "Oregon"
       },
       "us-west-1": {
-        "AMI": "ami-950d1ed0",
+        "AMI": "ami-b2b4d8d2",
         "Location": "N.California"
       },
+      "eu-central-1": {
+        "AMI": "ami-a6bcacca",
+        "Location": "EU_Frankfurt"
+      },
       "eu-west-1": {
-        "AMI": "ami-d275c8a5",
+        "AMI": "ami-2b75a958",
         "Location": "EU_Ireland"
       },
       "ap-southeast-1": {
-        "AMI": "ami-bf725eed",
+        "AMI": "ami-ff86419c",
         "Location": "Singapore"
       },
       "ap-southeast-2": {
-        "AMI": "ami-4fcfa675",
+        "AMI": "ami-7085da13",
         "Location": "Sydney"
       },
       "ap-northeast-1": {
-        "AMI": "ami-0e00030f",
+        "AMI": "ami-e6da8088",
         "Location": "Tokyo"
       },
+      "ap-northeast-2": {
+        "AMI": "ami-259d534b",
+        "Location": "Seoul"
+      },
       "sa-east-1": {
-        "AMI": "ami-63de6e7e",
+        "AMI": "ami-12338b7e",
         "Location": "Sao_Paul"
       }
     },
@@ -46,8 +54,12 @@
         "SEC": "us-west-2c"
       },
       "us-west-1": {
-        "PRI": "us-west-1c",
+        "PRI": "us-west-1a",
         "SEC": "us-west-1b"
+      },
+      "eu-central-1": {
+        "PRI": "eu-central-1a",
+        "SEC": "eu-central-1b"
       },
       "eu-west-1": {
         "PRI": "eu-west-1c",
@@ -57,13 +69,17 @@
         "PRI": "ap-southeast-1b",
         "SEC": "ap-southeast-1a"
       },
+      "ap-southeast-2": {
+        "PRI": "ap-southeast-2b",
+        "SEC": "ap-southeast-2a"
+      },
       "ap-northeast-1": {
         "PRI": "ap-northeast-1c",
         "SEC": "ap-northeast-1a"
       },
-      "ap-southeast-2": {
-        "PRI": "ap-southeast-2b",
-        "SEC": "ap-southeast-2a"
+      "ap-northeast-2": {
+        "PRI": "ap-northeast-2c",
+        "SEC": "ap-northeast-2a"
       },
       "sa-east-1": {
         "PRI": "sa-east-1b",
@@ -120,7 +136,7 @@
     },
     "MulitiAZDatabase": {
       "Description": "Crate a Multi-AZ RDS Database Instance",
-      "Default": "true",
+      "Default": "false",
       "Type": "String",
       "AllowedValues": [
         "true",
@@ -167,6 +183,7 @@
   "Resources": {
     "PublicSubnet": {
       "Type": "AWS::EC2::Subnet",
+      "DeletionPolicy": "Retain",
       "Properties": {
         "CidrBlock": "10.0.0.0/24",
         "AvailabilityZone": {
@@ -194,6 +211,7 @@
     },
     "RouteTable": {
       "Type": "AWS::EC2::RouteTable",
+      "DeletionPolicy": "Retain",
       "Properties": {
         "VpcId": {
           "Ref": "VPC"
@@ -210,6 +228,7 @@
     },
     "AssociationRtToPubSub": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RouteTableId": {
           "Ref": "RouteTable"
@@ -220,6 +239,8 @@
       }
     },
     "InternetGateway": {
+      "DependsOn": "VPC",
+      "DeletionPolicy": "Retain",
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {
         "Tags": [
@@ -233,7 +254,12 @@
       }
     },
     "AttachGatewayToVPC": {
+      "DependsOn": [
+        "VPC",
+        "InternetGateway"
+      ],
       "Type": "AWS::EC2::VPCGatewayAttachment",
+      "DeletionPolicy": "Retain",
       "Properties": {
         "InternetGatewayId": {
           "Ref": "InternetGateway"
@@ -245,6 +271,8 @@
     },
     "Route": {
       "Type": "AWS::EC2::Route",
+      "DependsOn": "AttachGatewayToVPC",
+      "DeletionPolicy": "Retain",
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
@@ -257,6 +285,7 @@
     },
     "VPC": {
       "Type": "AWS::EC2::VPC",
+      "DeletionPolicy": "Retain",
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "InstanceTenancy": "default",
@@ -265,7 +294,9 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "SampleVPC"
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
           },
           {
             "Key": "Application",
@@ -276,153 +307,20 @@
         ]
       }
     },
-    "IAMCreateSnapshotRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": {
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "ec2.amazonaws.com"
-            },
-            "Action": [
-              "sts:AssumeRole"
-            ]
-          }
-        },
-        "Path": "/"
-      }
-    },
-    "IAMCreateSnapshotPolicies": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "iamtest",
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "ec2:Describe*",
-                "ec2:CreateSnapshot",
-                "ec2:DeleteSnapshot"
-              ],
-              "Resource": "*"
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "IAMCreateSnapshotRole"
-          }
-        ]
-      }
-    },
-    "IAMCfInvalidationRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/CloudFrontFullAccess"
-        ],
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": {
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "ec2.amazonaws.com"
-            },
-            "Action": [
-              "sts:AssumeRole"
-            ]
-          }
-        },
-        "Path": "/"
-      }
-    },
-    "IAMCfInvalidationAccessKey": {
-      "Type": "AWS::IAM::AccessKey",
-      "Properties": {
-        "Status": "Active",
-        "UserName": {
-          "Ref": "IAMCfInvalidationUser"
-        }
-      }
-    },
-    "IAMCfInvalidationUser": {
-      "Type": "AWS::IAM::User",
-      "Properties": {
-        "Path": "/",
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/CloudFrontFullAccess",
-          "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-        ]
-      }
-    },
-    "IAMS3MediaRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-        ],
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": {
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "ec2.amazonaws.com"
-            },
-            "Action": [
-              "sts:AssumeRole"
-            ]
-          }
-        },
-        "Path": "/"
-      }
-    },
-    "IAMS3MediaAccessKey": {
-      "Type": "AWS::IAM::AccessKey",
-      "Properties": {
-        "Status": "Active",
-        "UserName": {
-          "Ref": "IAMS3MediaUser"
-        }
-      }
-    },
-    "IAMS3MediaUser": {
-      "Type": "AWS::IAM::User",
-      "Properties": {
-        "Path": "/",
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-        ]
-      }
-    },
-    "IAMForEC2": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Properties": {
-        "Path": "/",
-        "Roles": [
-          {
-            "Ref": "IAMCreateSnapshotRole"
-          }
-        ]
-      }
-    },
     "EC2": {
       "Type": "AWS::EC2::Instance",
       "Metadata": {
         "AWS::CloudFormation::Init": {
           "config": {
             "files": {
-              "/opt/local/create-snapshot.sh": {
-                "source": "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/create-snapshot.sh"
-              },
-              "/etc/cron.d/create-snapshot": {
-                "content": "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
+              "/opt/aws/cf_option.json": {
+                "content": "{\n                \"option\" : {\n                  \"cloudfront\" : \"true\"\n                }\n              }",
+                "mode": "00644",
+                "owner": "root",
+                "group": "root"
               },
               "/opt/aws/cloud_formation.json": {
-                "content": "{\n                \"rds\" : {\n                  \"database\" : \"wordpress\",\n                  \"username\" : \"amimoto\",\n                  \"password\" : \"{{password}}\",\n                  \"endpoint\" : \"{{endpoint}}\",\n                  \"port\"     : 3306\n                },\n                \"is-use\" : {\n                  \"cloudfront\" : \"true\",\n                  \"s3media\" : \"true\",\n                }\n              }",
+                "content": "{\n                \"rds\" : {\n                  \"database\" : \"wordpress\",\n                  \"username\" : \"amimoto\",\n                  \"password\" : \"{{password}}\",\n                  \"endpoint\" : \"{{endpoint}}\",\n                  \"port\"     : 3306\n                }\n              }",
                 "context": {
                   "endpoint": {
                     "Fn::GetAtt": [
@@ -516,72 +414,6 @@
         "IamInstanceProfile": {
           "Ref": "IAMForEC2"
         }
-      }
-    },
-    "SecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "This is Simple SecurityGroup made by CloudFormation",
-        "SecurityGroupIngress": [
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "22",
-            "ToPort": "22",
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "80",
-            "ToPort": "80",
-            "CidrIp": "0.0.0.0/0"
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Application",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          }
-        ],
-        "VpcId": {
-          "Ref": "VPC"
-        }
-      }
-    },
-    "ELB": {
-      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
-      "Properties": {
-        "Subnets": [
-          {
-            "Ref": "PublicSubnet"
-          }
-        ],
-        "HealthCheck": {
-          "HealthyThreshold": "2",
-          "Interval": "30",
-          "Target": "TCP:80",
-          "Timeout": "10",
-          "UnhealthyThreshold": "2"
-        },
-        "Listeners": [
-          {
-            "InstancePort": "80",
-            "LoadBalancerPort": "80",
-            "Protocol": "HTTP",
-            "InstanceProtocol": "HTTP"
-          }
-        ],
-        "Instances": [
-          {
-            "Ref": "EC2"
-          }
-        ],
-        "SecurityGroups": [
-          {
-            "Ref": "SecurityGroup"
-          }
-        ]
       }
     },
     "RDSSubnet1": {
@@ -738,12 +570,194 @@
         ]
       }
     },
-    "S3Media": {
-      "Type": "AWS::S3::Bucket",
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "WebsiteConfiguration": {
-          "IndexDocument": "index.html"
+        "GroupDescription": "This is Simple SecurityGroup made by CloudFormation",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
         }
+      }
+    },
+    "ELB": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "Subnets": [
+          {
+            "Ref": "PublicSubnet"
+          }
+        ],
+        "HealthCheck": {
+          "HealthyThreshold": "2",
+          "Interval": "30",
+          "Target": "TCP:80",
+          "Timeout": "10",
+          "UnhealthyThreshold": "2"
+        },
+        "Listeners": [
+          {
+            "InstancePort": "80",
+            "LoadBalancerPort": "80",
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
+          }
+        ],
+        "Instances": [
+          {
+            "Ref": "EC2"
+          }
+        ],
+        "SecurityGroups": [
+          {
+            "Ref": "SecurityGroup"
+          }
+        ]
+      }
+    },
+    "IAMPolicyForCloudFront": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "Description": "Allow invalidation",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "cloudfront:*Invalidation*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "IAMPolicyForS3Media": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "Description": "Allow manage object under specific bucket",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListAllMyBuckets"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:PutObjectAcl",
+                "s3:GetObjectAcl",
+                "s3:DeleteObject"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "S3Media"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "S3Media"
+                    }
+                  ]
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "IAMRoleForStack001": {
+      "Type": "AWS::IAM::Role",
+      "DependsOn": [
+        "IAMPolicyForCloudFront",
+        "IAMPolicyForS3Media"
+      ],
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "IAMPolicyForCloudFront"
+          },
+          {
+            "Ref": "IAMPolicyForS3Media"
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        },
+        "Path": "/"
+      }
+    },
+    "IAMForEC2": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "IAMRoleForStack001"
+          }
+        ]
       }
     },
     "CloudFront": {
@@ -777,7 +791,7 @@
           ],
           "PriceClass": "PriceClass_200",
           "Enabled": "true",
-          "Comment": "Sample CloudFront.",
+          "Comment": "Created by AMIMOTO CloudFormation.",
           "DefaultRootObject": "index.php",
           "DefaultCacheBehavior": {
             "SmoothStreaming": "false",
@@ -983,26 +997,14 @@
         }
       }
     },
-    "CloudWatch": {
-      "Type": "AWS::CloudWatch::Alarm",
+    "S3Media": {
+      "Type": "AWS::S3::Bucket",
       "Properties": {
-        "AlarmDescription": "CPU Alarm For Your Instance.",
-        "MetricName": "CPUUtilization",
-        "Namespace": "AWS/EC2",
-        "Statistic": "Maximum",
-        "Period": "300",
-        "EvaluationPeriods": "1",
-        "Threshold": "85",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": [
-          {
-            "Name": "InstanceId",
-            "Value": {
-              "Ref": "EC2"
-            }
-          }
-        ]
-      }
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html"
+        }
+      },
+      "DeletionPolicy": "Retain"
     }
   },
   "Outputs": {
@@ -1035,42 +1037,12 @@
         "Ref": "CloudFront"
       }
     },
-    "CloudFrontAccessKey": {
-      "Description": "This is CloudFront Access Key. Please set 'C3 CloudFlont Cache Clear' plugin on admin page.",
-      "Value": {
-        "Ref": "IAMCfInvalidationAccessKey"
-      }
-    },
-    "CloudFrontSecretKey": {
-      "Description": "This is CloudFront Secret Key. Please set 'C3 CloudFlont Cache Clear' plugin on admin page.",
-      "Value": {
-        "Fn::GetAtt": [
-          "IAMCfInvalidationAccessKey",
-          "SecretAccessKey"
-        ]
-      }
-    },
     "S3MediaBucketURL": {
       "Description": "This is S3 Bucket URL. Please set 'Nephila clavata' Plugin on admin page.",
       "Value": {
         "Fn::GetAtt": [
           "S3Media",
           "WebsiteURL"
-        ]
-      }
-    },
-    "S3MediaAccessKey": {
-      "Description": "This is S3 Access Key. Please set 'Nephila clavata' plugin on admin page.",
-      "Value": {
-        "Ref": "IAMS3MediaAccessKey"
-      }
-    },
-    "S3MediaSecretKey": {
-      "Description": "This is S3 Secret Key. Please set 'Nephila clavata' plugin on admin page.",
-      "Value": {
-        "Fn::GetAtt": [
-          "IAMS3MediaAccessKey",
-          "SecretAccessKey"
         ]
       }
     }
