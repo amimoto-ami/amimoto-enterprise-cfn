@@ -50,7 +50,12 @@ EC2 do
         Value do
           Ref "AWS::StackName"
         end
-      }
+		},_{
+		  Key "AmimotoDeploy"
+		  Value do
+			Ref "AWS::StackName"
+		  end
+		}
     ]
     Tenancy "default"
     SecurityGroupIds [

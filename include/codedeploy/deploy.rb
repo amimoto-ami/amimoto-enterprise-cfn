@@ -11,8 +11,26 @@ AmimotoDeploymentGroup do
 			Ref "AmimotoDeploy"
 		end
 		#AutoScalingGroups [
-		# ASさせるときに設定する
+		# @TODO ASさせるときに設定する
 		#]
+		Ec2TagFilters [
+			_{
+				Key "AmimotoDeploy"
+				Type "KEY_AND_VALUE"
+				Value  do
+					Ref "AWS::StackName"
+				end
+			}
+		]
+		DeploymentConfigName "CodeDeployDefault.OneAtATime"
+		#Deployment do
+		#	Description "This is AutoScaling Depolyment."
+		#	# IgnoreApplicationStopFailures TRUEorFALSE
+		#	Revision do
+		#		# @TODO CodeCommitがCloudFormationに対応したらここを設定する
+		#	end
+		#
+		#end
 		ServiceRoleArn do
 			Fn__GetAtt "IAMRoleForCodeDeploy", "Arn"
 		end
