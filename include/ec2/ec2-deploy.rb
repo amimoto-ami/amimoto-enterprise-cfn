@@ -6,11 +6,8 @@ EC2 do
     AWS__CloudFormation__Init do
       config do
         files do
-          _path("/opt/local/create-snapshot.sh") do
-            source "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/create-snapshot.sh"
-          end
-          _path("/etc/cron.d/create-snapshot") do
-            content "#Create snapshot\n0 4 * * * /bin/sh /opt/local/create-snapshot.sh > /dev/null 2>&1\n\n"
+          _path("/opt/local/init-codedeploy.sh") do
+            source "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/init-codedeploy.sh"
           end
         end
       end
@@ -50,12 +47,12 @@ EC2 do
         Value do
           Ref "AWS::StackName"
         end
-		},_{
-		  Key "AmimotoDeploy"
-		  Value do
-			Ref "AWS::StackName"
-		  end
-		}
+        },_{
+          Key "AmimotoDeploy"
+          Value do
+            Ref "AWS::StackName"
+          end
+        }
     ]
     Tenancy "default"
     SecurityGroupIds [
@@ -81,6 +78,8 @@ EC2 do
             _{
               Ref "AWS::Region"
             },
+            "\n",
+            "/bin/bash /opt/local/init-codedeploy.sh",
             "\n"
           ]
         ]
