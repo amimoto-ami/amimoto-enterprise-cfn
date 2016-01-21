@@ -20,6 +20,17 @@ AutoScaleSetting do
         Ref "SecurityGroup"
       }
     ]
-    #UserData
+    UserData do
+      Fn__Base64 do
+        Fn__Join [
+          "",
+          [
+            "#!/bin/bash\n",
+            "curl -L https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/init-codedeploy.sh | /bin/bash",
+            "\n"
+          ]
+        ]
+      end
+    end
   end
 end
