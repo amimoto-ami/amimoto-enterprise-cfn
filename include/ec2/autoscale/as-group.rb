@@ -11,6 +11,21 @@ AutoScalingGroup do
         ]
       }
     ]
+    Tags [
+      _{
+        Key "Application"
+        Value do
+          Ref "AWS::StackName"
+        end
+		PropagateAtLaunch true
+      },_{
+        Key "AmimotoDeploy"
+        Value do
+          Ref "AWS::StackName"
+        end
+		PropagateAtLaunch true
+      }
+    ]
     Cooldown "600"
     DesiredCapacity "0"
     HealthCheckGracePeriod "300"
