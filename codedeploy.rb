@@ -18,7 +18,8 @@ Resources do
   _include 'include/vpc/vpc.rb'
   _include "include/ec2/ec2-deploy.rb"
   _include "include/security_group.rb"
-  _include "include/eip.rb"
+  _include "include/elb.rb"
+  _include "include/ec2/autoscale/as.rb"
   _include "include/codedeploy/deploy.rb"
 end
 

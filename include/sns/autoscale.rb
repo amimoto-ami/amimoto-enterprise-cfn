@@ -23,13 +23,5 @@ SNSAutoScale do
           ]
         ]
     end
-    Subscription [
-      _{
-        Endpoint do
-          Ref "MailAddress"
-        end
-        Protocol "email"
-      }
-    ]
   end
 end
