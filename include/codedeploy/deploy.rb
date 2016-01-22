@@ -10,9 +10,11 @@ AmimotoDeploymentGroup do
 		ApplicationName do
 			Ref "AmimotoDeploy"
 		end
-		#AutoScalingGroups [
-		# @TODO ASさせるときに設定する
-		#]
+		AutoScalingGroups [
+			_{
+				Ref "AutoScalingGroup"
+			}
+		]
 		Ec2TagFilters [
 			_{
 				Key "AmimotoDeploy"

@@ -10,7 +10,8 @@ IAMPolicyForCodeDeploy do
           ## https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/getting-started-walkthrough.html
           Effect "Allow"
           Action [
-            "ec2:*"
+            "ec2:*",
+			"autoscaling:*"
           ]
           Resource "*"
         }
