@@ -25,6 +25,8 @@ Resources do
   _include 'include/iam/for_stack_001.rb'
   _include "include/cloudfront/cf.rb"
   _include "include/s3/s3-media.rb"
+  _include "include/ec2/autoscale/as.rb"
+  _include "include/codedeploy/deploy.rb"
 end
 
 Outputs do
