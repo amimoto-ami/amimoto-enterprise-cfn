@@ -4,6 +4,9 @@ EC2 do
     AWS__CloudFormation__Init do
       config do
         files do
+          _path("/opt/local/init-codedeploy.sh") do
+            source "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/init-codedeploy.sh"
+          end
           _path("/opt/aws/cf_option.json") do
               content '{
                 "option" : {
@@ -103,6 +106,8 @@ EC2 do
             _{
               Ref "AWS::Region"
             },
+            "\n",
+            "/bin/bash -x /opt/local/init-codedeploy.sh",
             "\n"
           ]
         ]
