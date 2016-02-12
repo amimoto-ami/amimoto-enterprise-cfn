@@ -1,7 +1,9 @@
 AutoScaleSetting do
   Type "AWS::AutoScaling::LaunchConfiguration"
   Properties do
-    #IamInstanceProfile
+    IamInstanceProfile do
+      Ref "IAMForEC2"
+    end
     ImageId do
       Fn__FindInMap [
         "MPAmimotov4",

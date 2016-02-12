@@ -79,7 +79,7 @@ EC2 do
               Ref "AWS::Region"
             },
             "\n",
-            "/bin/bash /opt/local/init-codedeploy.sh",
+            "/bin/bash -x /opt/local/init-codedeploy.sh",
             "\n"
           ]
         ]
