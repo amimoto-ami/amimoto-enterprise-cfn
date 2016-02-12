@@ -313,6 +313,9 @@
         "AWS::CloudFormation::Init": {
           "config": {
             "files": {
+              "/opt/local/init-codedeploy.sh": {
+                "source": "https://s3-ap-northeast-1.amazonaws.com/cfn-jinkei-templates/init-codedeploy.sh"
+              },
               "/opt/aws/cf_option.json": {
                 "content": "{\n                \"option\" : {\n                  \"cloudfront\" : \"true\"\n                }\n              }",
                 "mode": "00644",
@@ -407,6 +410,8 @@
                 {
                   "Ref": "AWS::Region"
                 },
+                "\n",
+                "/bin/bash -x /opt/local/init-codedeploy.sh",
                 "\n"
               ]
             ]
@@ -1160,6 +1165,9 @@
     "AutoScaleSetting": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "IAMForEC2"
+        },
         "ImageId": {
           "Fn::FindInMap": [
             "MPAmimotov4",
