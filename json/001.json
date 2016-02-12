@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nEasy Setup and Automatic make Snapshot(2Days).\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
@@ -383,6 +383,12 @@
           {
             "Key": "HasRDS?",
             "Value": "true"
+          },
+          {
+            "Key": "AmimotoDeploy",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
           }
         ],
         "Tenancy": "default",
