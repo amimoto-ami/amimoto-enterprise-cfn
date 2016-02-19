@@ -10,7 +10,8 @@ EC2 do
           _path("/opt/aws/cf_option.json") do
               content '{
                 "option" : {
-                  "cloudfront" : "true"
+                  "cloudfront" : "true",
+                  "autoscale" : "true"
                 }
               }'
             mode "00644"
