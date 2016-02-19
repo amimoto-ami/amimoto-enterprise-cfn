@@ -7,7 +7,9 @@ SecurityGroup do
         IpProtocol "tcp"
         FromPort   22
         ToPort     22
-        CidrIp     "0.0.0.0/0"
+        CidrIp do
+          Ref "SSHLocation"
+        end
       },
       _{
         IpProtocol "tcp"
