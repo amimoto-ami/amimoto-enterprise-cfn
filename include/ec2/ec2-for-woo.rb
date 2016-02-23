@@ -32,13 +32,7 @@ EC2 do
       _{
         Key "HasRDS?"
         Value "true"
-	  },
-	  _{
-	    Key "AmimotoDeploy"
-	    Value do
-	      Ref "AWS::StackName"
-	    end
-      }
+	  }
     ]
   end
 end
