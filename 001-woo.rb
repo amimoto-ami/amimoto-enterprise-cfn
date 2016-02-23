@@ -6,7 +6,7 @@ Description (<<-EOS).undent
 EOS
 
 Mappings do
-  _include "include/mapping/ami_hvm.rb"
+  _include "include/mapping/ami_woo.rb"
   _include "include/mapping/az.rb"
 end
 
