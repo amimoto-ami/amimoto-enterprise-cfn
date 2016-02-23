@@ -1,15 +1,15 @@
-{"eu-west-1"=>"ami-9daa93ea", "ap-southeast-1"=>"ami-842230d6", "ap-southeast-2"=>"ami-dd7326e7", "eu-central-1"=>"ami-69b2a205", "ap-northeast-2"=>"ami-19985677", "ap-northeast-1"=>"ami-7e147a7e", "us-east-1"=>"ami-941465fe", "sa-east-1"=>"ami-ac4ef6c0", "us-west-1"=>"ami-a7bdd1c7", "us-west-2"=>"ami-24749917"}
+{"eu-west-1"=>"ami-8ea91efd", "ap-southeast-1"=>"ami-4902cd2a", "ap-southeast-2"=>"ami-2b1d3948", "eu-central-1"=>"ami-8c3820e0", "ap-northeast-2"=>"ami-80f739ee", "ap-northeast-1"=>"ami-3ebe8650", "us-east-1"=>"ami-cb4865a1", "sa-east-1"=>"ami-8c52d2e0", "us-west-1"=>"ami-d185f2b1", "us-west-2"=>"ami-bc30d7dc"}
 MPAmimotov4(
   {
-  "eu-west-1"=>{"AMI"=>"ami-9daa93ea"},
-  "ap-southeast-1"=>{"AMI"=>"ami-842230d6"},
-  "ap-southeast-2"=>{"AMI"=>"ami-dd7326e7"},
-  "eu-central-1"=>{"AMI"=>"ami-69b2a205"},
-  "ap-northeast-2"=>{"AMI"=>"ami-19985677"},
-  "ap-northeast-1"=>{"AMI"=>"ami-7e147a7e"},
-  "us-east-1"=>{"AMI"=>"ami-941465fe"},
-  "sa-east-1"=>{"AMI"=>"ami-ac4ef6c0"},
-  "us-west-1"=>{"AMI"=>"ami-a7bdd1c7"},
-  "us-west-2"=>{"AMI"=>"ami-24749917"},
+  "eu-west-1"=>{"AMI"=>"ami-8ea91efd"},
+  "ap-southeast-1"=>{"AMI"=>"ami-4902cd2a"},
+  "ap-southeast-2"=>{"AMI"=>"ami-2b1d3948"},
+  "eu-central-1"=>{"AMI"=>"ami-8c3820e0"},
+  "ap-northeast-2"=>{"AMI"=>"ami-80f739ee"},
+  "ap-northeast-1"=>{"AMI"=>"ami-3ebe8650"},
+  "us-east-1"=>{"AMI"=>"ami-cb4865a1"},
+  "sa-east-1"=>{"AMI"=>"ami-8c52d2e0"},
+  "us-west-1"=>{"AMI"=>"ami-d185f2b1"},
+  "us-west-2"=>{"AMI"=>"ami-bc30d7dc"},
  }
 )
