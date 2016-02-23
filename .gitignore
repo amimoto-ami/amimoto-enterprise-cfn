@@ -5,6 +5,7 @@ create-vpc.rb
 addon
 testenv.md
 include/mapping/stg/
+.DS_Store
 
 ## direnv
 /.envrc
@@ -51,4 +52,3 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
-
