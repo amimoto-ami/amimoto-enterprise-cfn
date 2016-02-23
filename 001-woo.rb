@@ -19,7 +19,7 @@ end
 
 Resources do
   _include 'include/vpc/vpc.rb'
-  _include "include/ec2/ec2-with-rds.rb"
+  _include "include/ec2/ec2-for-woo.rb"
   _include "include/rds/rds.rb"
   _include "include/security_group.rb"
   _include "include/elb.rb"

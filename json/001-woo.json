@@ -319,13 +319,13 @@
           "config": {
             "files": {
               "/opt/aws/cf_option.json": {
-                "content": "{\n                \"option\" : {\n                  \"cloudfront\" : \"true\"\n                }\n              }",
+                "content": "{\n                \"option\" : {\n                  \"cloudfront\" : \"true\",\n                  \"woo\": \"true\"\n                }\n              }",
                 "mode": "00644",
                 "owner": "root",
                 "group": "root"
               },
               "/opt/aws/cloud_formation.json": {
-                "content": "{\n                \"rds\" : {\n                  \"database\" : \"wordpress\",\n                  \"username\" : \"amimoto\",\n                  \"password\" : \"{{password}}\",\n                  \"endpoint\" : \"{{endpoint}}\",\n                  \"port\"     : 3306\n                }\n              }",
+                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  }\n\t}",
                 "context": {
                   "endpoint": {
                     "Fn::GetAtt": [
@@ -378,25 +378,15 @@
         "SubnetId": {
           "Ref": "PublicSubnet"
         },
-        "Tags": [
+        "Tenancy": "default",
+        "SecurityGroupIds": [
           {
-            "Key": "Application",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          },
-          {
-            "Key": "HasRDS?",
-            "Value": "true"
-          },
-          {
-            "Key": "AmimotoDeploy",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
+            "Ref": "SecurityGroup"
           }
         ],
-        "Tenancy": "default",
+        "IamInstanceProfile": {
+          "Ref": "IAMForEC2"
+        },
         "UserData": {
           "Fn::Base64": {
             "Fn::Join": [
@@ -417,14 +407,24 @@
             ]
           }
         },
-        "SecurityGroupIds": [
+        "Tags": [
           {
-            "Ref": "SecurityGroup"
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          },
+          {
+            "Key": "HasRDS?",
+            "Value": "true"
+          },
+          {
+            "Key": "AmimotoDeploy",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
           }
-        ],
-        "IamInstanceProfile": {
-          "Ref": "IAMForEC2"
-        }
+        ]
       }
     },
     "RDSSubnet1": {
