@@ -42,6 +42,8 @@ EC2 do
             },
             "\n",
             "/bin/bash -x /opt/local/init-codedeploy.sh",
+            "\n",
+            "rm -rf /opt/local/amimoto"
             "\n"
           ]
         ]
